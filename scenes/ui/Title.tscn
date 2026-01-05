@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkqvxyym2ywmr"]
+
+[ext_resource type="Script" uid="uid://6bl22un25lvr" path="res://scripts/ui/title.gd" id="1_nb57w"]
+
+[node name="Title" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -572.0
+offset_top = -326.0
+offset_right = -572.0
+offset_bottom = -326.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nb57w")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="GameTitleLabel" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+theme_override_font_sizes/font_size = 60
+
+[node name="StartButton" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28329062, 0.5674134, 0.52625453, 1)
+theme_override_font_sizes/font_size = 30
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62652916, 0.24146, 0.14263514, 1)
+theme_override_font_sizes/font_size = 30
+text = "Quit"
