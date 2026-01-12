@@ -18,7 +18,7 @@ Each line appears centered, fades in, holds briefly, then fades out.
 This is the beginning of our story.
 Press Continue to enter the world."""
 
-@export var world_scene_path: String = "res://scenes/world/World.tscn"
+@export var world_scene_path: String = "res://scenes/world/WorldSurface.tscn"
 
 # Timing controls (seconds)
 @export var fade_in_time: float = 0.6
