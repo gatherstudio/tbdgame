@@ -1,19 +1,16 @@
-In a world shaped by small choices and quiet places,
-something has begun to stir.
-
-Not with fire or thunder,
-but with moments easily missed.
-
-Old paths are being walked again.
-New ones are waiting to be found.
-
-This is not a story of destiny,
-or of heroes chosen long ago.
-
-It is a story of ordinary beginnings,
-and what happens when someone decides to take the next step.
-
-The world is open.
-The story is unfinished.
-
-And it starts now.
+Opening scene- (with short intro music)
+[camera pans down from a starry night sky]
+GATHER STUDIO PRESENTS
+[camera pans down to you, lying unconcious on the ground, out in the open]
+WASTELANDER
+[you stir, then stand up]
+[an NPC (nice creature) walks up, tells you 'you shouldnt be out here. come with me' then leads you off screen through a trapdoor in the ground]
+Story Text- (line by line)
+[an NPC tells this to you, after you explore a bit]
+long, long ago,
+your people discovered a mysterious portal in the depths of the earth.
+they found out they can send their trash through the portal,
+over hundreds of years, that trash built up
+the creatures living in this 'strange world' adapted to their harsh environment
+some stayed aboveground, and turned into trash monsters
+others escaped underground, digging tunnels and burrows

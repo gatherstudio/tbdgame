@@ -47,23 +47,26 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a8g62"]
-radius = 67.0
-height = 154.0
+radius = 32.0
+height = 86.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_8iu4y")
 
 [node name="PlayerSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 7
+visibility_layer = 7
 position = Vector2(16, 4)
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_ttitt")
 animation = &"float"
 frame = 1
 frame_progress = 0.08047894
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(15, -4)
+position = Vector2(15, 6)
 shape = SubResource("CapsuleShape2D_a8g62")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-2, 1)
+zoom = Vector2(5, 5)

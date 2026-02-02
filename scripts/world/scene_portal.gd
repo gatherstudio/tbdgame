@@ -34,4 +34,8 @@ func _change_scene() -> void:
 	if destination_scene_path.strip_edges() == "":
 		return
 
-	get_tree().change_scene_to_file(destination_scene_path)
+	var fader := get_tree().current_scene.get_node_or_null("ScreenFader")
+	if fader != null:
+		fader.fade_out_then_change_scene(destination_scene_path)
+	else:
+		get_tree().change_scene_to_file(destination_scene_path)

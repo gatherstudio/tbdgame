@@ -19,7 +19,7 @@ Technical notes:
 @export var intro_story_scene_path: String = "res://scenes/ui/IntroStory.tscn"
 
 # Text displayed as the game title
-@export var game_title_text: String = "To Be Decided Game"
+@export var game_title_text: String = "Wastelander"
 
 # ============================================================
 # CORE LOGIC
