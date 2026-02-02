@@ -13,10 +13,31 @@ Each line appears centered, fades in, holds briefly, then fades out.
 
 @export var story_text_path: String = "res://data/story/intro_story.txt"
 
-@export_multiline var fallback_story_text: String = """Welcome to our game.
+@export_multiline var fallback_story_text: String = """Opening scene- (with short intro music)
 
-This is the beginning of our story.
-Press Continue to enter the world."""
+[camera pans down from a starry night sky]
+
+GATHER STUDIO PRESENTS
+
+[camera pans down to you, lying unconcious on the ground, out in the open]
+
+WASTELANDER
+
+[you stir, then stand up]
+
+[an NPC (nice creature) walks up, tells you 'you shouldnt be out here. come with me' then leads you off screen through a trapdoor in the ground]
+
+Story Text- (line by line)
+
+[an NPC tells this to you, after you explore a bit]
+
+long, long ago,
+your people discovered a mysterious portal in the depths of the earth.
+they found out they can send their trash through the portal,
+over hundreds of years, that trash built up
+the creatures living in this 'strange world' adapted to their harsh environment
+some stayed aboveground, and turned into trash monsters
+others escaped underground, digging tunnels and burrows"""
 
 @export var world_scene_path: String = "res://scenes/world/WorldSurface.tscn"
 
