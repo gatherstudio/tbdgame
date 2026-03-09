@@ -6,7 +6,7 @@ Stores simple global data that persists across scene changes.
 # ============================================================
 # STUDENT DEVELOPER ZONE
 # ============================================================
-
+var player_name: String = "Traveler"
 var scrap_count: int = 0
 var water_count: int = 0
 var mushroom_count: int = 0

@@ -51,26 +51,40 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if not _has_destination:
-		velocity = Vector2.ZERO
-		_update_animation(Vector2.ZERO)
-		return
 
-	var to_target := _destination - global_position
-	var distance := to_target.length()
+	# 1. Check keyboard input
+	var input_vector := Vector2(
+		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
+		Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
+	)
 
-	# Stop if close enough
-	if distance <= stop_distance:
+	# 2. If keyboard is used -> move by keyboard
+	if input_vector.length() > 0:
 		_has_destination = false
-		velocity = Vector2.ZERO
-		_update_animation(Vector2.ZERO)
+		var direction := input_vector.normalized()
+		velocity = direction * move_speed
+		move_and_slide()
+		_update_animation(direction)
 		return
 
-	var direction := to_target / distance
-	velocity = direction * move_speed
-	move_and_slide()
+	# 3. Otherwise use click-to-move
+	if _has_destination:
+		var to_target := _destination - global_position
+		var distance := to_target.length()
 
-	_update_animation(direction)
+		if distance <= stop_distance:
+			_has_destination = false
+			velocity = Vector2.ZERO
+			_update_animation(Vector2.ZERO)
+			return
+
+		var direction := to_target.normalized()
+		velocity = direction * move_speed
+		move_and_slide()
+		_update_animation(direction)
+	else:
+		velocity = Vector2.ZERO
+		_update_animation(Vector2.ZERO)
 
 
 func _set_destination(world_position: Vector2) -> void:

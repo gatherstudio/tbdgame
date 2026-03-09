@@ -1,0 +1,145 @@
+[gd_scene load_steps=12 format=3 uid="uid://b8mirc1e13pfq"]
+
+[ext_resource type="Script" uid="uid://7e3smfc47ro1" path="res://scripts/intro/intro_scene.gd" id="1_gfuq4"]
+[ext_resource type="Texture2D" uid="uid://5leo31onboqn" path="res://assets/art/characters/ghost_spritesheet.png" id="2_oti26"]
+[ext_resource type="Texture2D" uid="uid://ckmwlemkk42ky" path="res://assets/art/characters/maincharacter.png" id="2_qvikk"]
+[ext_resource type="AudioStream" uid="uid://bs1akr6bby87v" path="res://assets/audio/music/Intro.wav" id="3_oti26"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g5gjw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_qvikk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6byan"]
+atlas = ExtResource("2_oti26")
+region = Rect2(0, 0, 742, 875)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81w0e"]
+atlas = ExtResource("2_oti26")
+region = Rect2(742, 0, 742, 875)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cn4eg"]
+atlas = ExtResource("2_oti26")
+region = Rect2(1484, 0, 742, 875)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yyedw"]
+atlas = ExtResource("2_oti26")
+region = Rect2(0, 875, 742, 875)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lw2oi"]
+atlas = ExtResource("2_oti26")
+region = Rect2(742, 875, 742, 875)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ci5wc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6byan")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_81w0e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cn4eg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yyedw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lw2oi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="IntroScene" type="Node2D"]
+script = ExtResource("1_gfuq4")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.19715118, 0.2707092, 0.28493854, 1)
+
+[node name="PlayerGhost" type="AnimatedSprite2D" parent="."]
+position = Vector2(1221, 463.00003)
+scale = Vector2(6, 6)
+sprite_frames = SubResource("SpriteFrames_g5gjw")
+frame_progress = 0.47637215
+centered = false
+
+[node name="NPCGhost" type="AnimatedSprite2D" parent="."]
+position = Vector2(1967, 530)
+scale = Vector2(0.2, 0.2)
+sprite_frames = SubResource("SpriteFrames_ci5wc")
+frame_progress = 0.9914374
+
+[node name="DialogueLayer" type="CanvasLayer" parent="."]
+
+[node name="DialogueBox" type="Panel" parent="DialogueLayer"]
+offset_left = 961.0
+offset_top = 759.0
+offset_right = 1657.0
+offset_bottom = 864.0
+
+[node name="SpeakerLabel" type="Label" parent="DialogueLayer/DialogueBox"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="DialogueLabel" type="Label" parent="DialogueLayer/DialogueBox"]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 9.0
+offset_right = 698.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Dialogue goes here
+"
+autowrap_mode = 2
+
+[node name="ContinueLabel" type="Label" parent="DialogueLayer/DialogueBox"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="NameInput" type="LineEdit" parent="DialogueLayer/DialogueBox"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 129.0
+offset_right = 698.0
+offset_bottom = 244.0
+
+[node name="ConfirmNameButton" type="Button" parent="DialogueLayer/DialogueBox"]
+layout_mode = 0
+offset_left = 423.0
+offset_top = 253.0
+offset_right = 703.0
+offset_bottom = 335.0
+
+[node name="AdvanceButton" type="Button" parent="DialogueLayer/DialogueBox"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="CutsceneTimer" type="Timer" parent="."]
+
+[node name="IntroMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_oti26")
+
+[connection signal="text_submitted" from="DialogueLayer/DialogueBox/NameInput" to="." method="_on_NameInput_text_submitted"]
+[connection signal="pressed" from="DialogueLayer/DialogueBox/ConfirmNameButton" to="." method="_on_confirm_name_button_pressed"]
+[connection signal="pressed" from="DialogueLayer/DialogueBox/AdvanceButton" to="." method="_on_AdvanceButton_pressed"]

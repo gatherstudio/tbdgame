@@ -27,7 +27,7 @@ func _process(_delta: float) -> void:
 
 func _build_text() -> String:
 	var parts: Array[String] = []
-
+	parts.append("Traveler %s" % GameState.player_name)
 	if show_scrap:
 		parts.append("Scrap: %d" % GameState.scrap_count)
 	if show_mushrooms:
