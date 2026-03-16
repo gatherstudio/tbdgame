@@ -4,8 +4,9 @@ extends Area2D
 # STUDENT DEVELOPER ZONE
 # ============================================================
 
-@export_enum("scrap", "mushroom", "water") var item_id: String = "scrap"
-@export_enum("scrap", "mushroom", "water") var icon_id: String = "scrap"
+@export_enum("scrap", "mushroom", "banana", "screws", "sea_glass", "portal_shard", "brains", "cans") var item_id: String = "scrap"
+
+@export_enum("scrap", "mushroom", "banana", "screws", "sea_glass", "portal_shard", "brains", "cans") var icon_id: String = "scrap"
 
 @export var amount: int = 1
 @export var consume_on_collect: bool = true
@@ -23,22 +24,25 @@ func _ready() -> void:
 func _on_body_entered(body: Node) -> void:
 	if not body.is_in_group("player"):
 		return
-
+	var sound_player = get_tree().get_first_node_in_group("collect_sound_player")
+	if sound_player:
+		sound_player.play()
 	GameState.add_item(StringName(item_id), amount)
 
 	if consume_on_collect:
 		queue_free()
 
+var item_icons := {
+	"scrap": preload("res://assets/art/items/scrap.png"),
+	"mushroom": preload("res://assets/art/items/mushroom.png"),
+	#"banana": preload("res://assets/art/items/banana.png"),
+	#"screws": preload("res://assets/art/items/screws.png"),
+	#"sea_glass": preload("res://assets/art/items/sea_glass.png"),
+	"portal_shard": preload("res://assets/art/items/shards.png"),
+	"brains": preload("res://assets/art/items/brains.png"),
+	"cans": preload("res://assets/art/items/can.png")
+}
+
 func _update_icon() -> void:
-	var texture_path := ""
-
-	match icon_id:
-		"scrap":
-			texture_path = "res://assets/art/items/scrap.png"
-		"mushroom":
-			texture_path = "res://assets/art/items/mushroom.png"
-		"water":
-			texture_path = "res://assets/art/items/water.png"
-
-	if texture_path != "":
-		icon.texture = load(texture_path)
+	if item_icons.has(icon_id):
+		icon.texture = item_icons[icon_id]

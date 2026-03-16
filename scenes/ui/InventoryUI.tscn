@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://1y6fdpoewt6t"]
+
+[ext_resource type="Script" uid="uid://ccw2rogtlplvb" path="res://scripts/ui/inventory_ui.gd" id="1_p0ay3"]
+
+[node name="InventoryUi" type="CanvasLayer"]
+script = ExtResource("1_p0ay3")
+
+[node name="BackpackButton" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="InventoryPanel" type="Panel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TitleLabel" type="Label" parent="InventoryPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="GridContainer" type="GridContainer" parent="InventoryPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="pressed" from="BackpackButton" to="." method="_on_backpack_button_pressed"]

@@ -16,7 +16,7 @@ This version is intentionally simple:
 # Safe to edit values in this section.
 # ============================================================
 
-@export var move_speed: float = 300.0
+@export var move_speed: float = 150.0
 
 # How close the player must get to the target before stopping
 @export var stop_distance: float = 6.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://dsuyulrgshs2c"]
+[gd_scene load_steps=21 format=4 uid="uid://dsuyulrgshs2c"]
 
 [ext_resource type="PackedScene" uid="uid://c0y061s368gcg" path="res://scenes/actors/Player.tscn" id="1_mp8f5"]
 [ext_resource type="Texture2D" uid="uid://d11fflipjn313" path="res://assets/art/tilesets/debug_grid_32.png" id="2_6hmjp"]
@@ -8,8 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://cm21nlrnjt8c8" path="res://assets/art/tilesets/undergroundtiles.png" id="5_jsstb"]
 [ext_resource type="Texture2D" uid="uid://dty6hsb1ygvfw" path="res://assets/art/tilesets/cave.png" id="6_gy2sp"]
 [ext_resource type="PackedScene" uid="uid://tmwc3pgdbi5v" path="res://scenes/interactables/pickups/Pickup.tscn" id="8_jsstb"]
-[ext_resource type="PackedScene" uid="uid://yudq08s5fxq4" path="res://scenes/ui/HUD.tscn" id="9_gy2sp"]
 [ext_resource type="PackedScene" uid="uid://dju3uoh0lkkj4" path="res://scenes/ui/ScreenFader.tscn" id="10_qqos5"]
+[ext_resource type="PackedScene" uid="uid://1y6fdpoewt6t" path="res://scenes/ui/InventoryUI.tscn" id="11_j26vk"]
+[ext_resource type="AudioStream" uid="uid://b8jp273l22wdl" path="res://assets/audio/sfx/Collect Sound.mp3" id="12_hlm7m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6eebf"]
 texture = ExtResource("2_6hmjp")
@@ -20333,7 +20334,6 @@ size = Vector2(24.859375, 25.328125)
 [node name="WorldSurface" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_mp8f5")]
-scale = Vector2(0.2, 0.2)
 stop_distance = 4.0
 
 [node name="Ground" type="TileMapLayer" parent="."]
@@ -20350,29 +20350,43 @@ tile_map_data = PackedByteArray("AADg/+b/AAAAAAAAAADg/+f/AAAAAAEAAADh/+b/AAABAAA
 tile_set = SubResource("TileSet_poelh")
 
 [node name="Portals" type="Node2D" parent="."]
+scale = Vector2(2, 2)
 
 [node name="ToUnderground" type="Area2D" parent="Portals"]
 script = ExtResource("3_6hmjp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Portals/ToUnderground"]
-position = Vector2(-494.4297, -395.33594)
+position = Vector2(-247, -199.5)
 shape = SubResource("RectangleShape2D_mp8f5")
 
 [node name="Pickup" parent="." instance=ExtResource("8_jsstb")]
 position = Vector2(-52, -40)
+item_id = "cans"
+icon_id = "cans"
 
 [node name="Pickup2" parent="." instance=ExtResource("8_jsstb")]
 position = Vector2(-201, -91)
+item_id = "cans"
+icon_id = "cans"
 
 [node name="Pickup3" parent="." instance=ExtResource("8_jsstb")]
 position = Vector2(-158, -179)
+item_id = "cans"
+icon_id = "cans"
 
 [node name="Pickup4" parent="." instance=ExtResource("8_jsstb")]
 position = Vector2(-310, -237)
+item_id = "brains"
+icon_id = "brains"
 
 [node name="Pickup5" parent="." instance=ExtResource("8_jsstb")]
 position = Vector2(-460, -306)
-
-[node name="HUD" parent="." instance=ExtResource("9_gy2sp")]
+item_id = "cans"
+icon_id = "cans"
 
 [node name="ScreenFader" parent="." instance=ExtResource("10_qqos5")]
+
+[node name="InventoryUi" parent="." instance=ExtResource("11_j26vk")]
+
+[node name="CollectSoundPlayer" type="AudioStreamPlayer2D" parent="." groups=["collect_sound_player"]]
+stream = ExtResource("12_hlm7m")

@@ -43,6 +43,7 @@ var typing_speed := 0.025
 func _ready() -> void:
 	setup_layout()
 	intro_music.play()
+	npc_ghost.play()
 	run_step()
 
 
@@ -59,7 +60,7 @@ func setup_layout() -> void:
 	# ------------------------------------------------------------
 	# Keep both characters around the center of the screen instead of top-left.
 	player_ghost.position = Vector2(500, 330)
-	npc_ghost.position = Vector2(900, 330)
+	npc_ghost.position = Vector2(900, 200)
 
 	# Start player sideways / unconscious.
 	player_ghost.rotation_degrees = 90
@@ -67,20 +68,20 @@ func setup_layout() -> void:
 	# ------------------------------------------------------------
 	# DIALOGUE BOX PLACEMENT
 	# ------------------------------------------------------------
-	dialogue_box.position = Vector2(180, 500)
-	dialogue_box.size = Vector2(920, 170)
+	dialogue_box.position = Vector2(1300, 1600)
+	dialogue_box.size = Vector2(1000, 200)
 
 	speaker_label.position = Vector2(24, 14)
-	dialogue_label.position = Vector2(24, 46)
+	dialogue_label.position = Vector2(24, 60)
 	dialogue_label.size = Vector2(780, 60)
 
-	continue_label.position = Vector2(700, 132)
+	continue_label.position = Vector2(780, 110)
 	continue_label.size = Vector2(190, 20)
 
-	name_input.position = Vector2(24, 105)
+	name_input.position = Vector2(24, 130)
 	name_input.size = Vector2(300, 34)
 
-	confirm_button.position = Vector2(340, 105)
+	confirm_button.position = Vector2(340, 130)
 	confirm_button.size = Vector2(150, 34)
 	confirm_button.text = "Confirm"
 
@@ -101,11 +102,11 @@ func setup_layout() -> void:
 	# ------------------------------------------------------------
 	# FONT SIZES
 	# ------------------------------------------------------------
-	speaker_label.add_theme_font_size_override("font_size", 22)
-	dialogue_label.add_theme_font_size_override("font_size", 30)
-	continue_label.add_theme_font_size_override("font_size", 14)
+	speaker_label.add_theme_font_size_override("font_size", 40)
+	dialogue_label.add_theme_font_size_override("font_size", 40)
+	continue_label.add_theme_font_size_override("font_size", 20)
 	name_input.add_theme_font_size_override("font_size", 20)
-	confirm_button.add_theme_font_size_override("font_size", 18)
+	confirm_button.add_theme_font_size_override("font_size", 20)
 
 
 func run_step() -> void:
@@ -266,8 +267,8 @@ func move_npc() -> void:
 func walk_off() -> void:
 	var tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(player_ghost, "position:x", 1120, 2.0)
-	tween.tween_property(npc_ghost, "position:x", 1040, 2.0)
+	tween.tween_property(player_ghost, "position:x", 2000, 2.0)
+	tween.tween_property(npc_ghost, "position:x", 1740, 2.0)
 	await tween.finished
 
 

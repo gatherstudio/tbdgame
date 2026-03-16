@@ -7,8 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://cm21nlrnjt8c8" path="res://assets/art/tilesets/undergroundtiles.png" id="4_0luy8"]
 [ext_resource type="Texture2D" uid="uid://dty6hsb1ygvfw" path="res://assets/art/tilesets/cave.png" id="5_nn5kp"]
 [ext_resource type="PackedScene" uid="uid://tmwc3pgdbi5v" path="res://scenes/interactables/pickups/Pickup.tscn" id="7_nn5kp"]
-[ext_resource type="PackedScene" uid="uid://yudq08s5fxq4" path="res://scenes/ui/HUD.tscn" id="8_d2jxj"]
 [ext_resource type="PackedScene" uid="uid://dju3uoh0lkkj4" path="res://scenes/ui/ScreenFader.tscn" id="9_ede45"]
+[ext_resource type="PackedScene" uid="uid://1y6fdpoewt6t" path="res://scenes/ui/InventoryUI.tscn" id="10_7ts8d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6eebf"]
 texture = ExtResource("2_rj7s8")
@@ -19912,7 +19912,6 @@ size = Vector2(16.75, 16.25)
 [node name="WorldUnderground" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_t3tne")]
-scale = Vector2(0.2, 0.2)
 stop_distance = 4.0
 
 [node name="Ground" type="TileMapLayer" parent="."]
@@ -19941,8 +19940,6 @@ position = Vector2(-58, 87)
 item_id = "mushroom"
 icon_id = "mushroom"
 
-[node name="HUD" parent="." instance=ExtResource("8_d2jxj")]
-
 [node name="Pickup2" parent="." instance=ExtResource("7_nn5kp")]
 position = Vector2(-137, 378)
 item_id = "mushroom"
@@ -19950,7 +19947,9 @@ icon_id = "mushroom"
 
 [node name="Pickup3" parent="." instance=ExtResource("7_nn5kp")]
 position = Vector2(-24, 218)
-item_id = "water"
-icon_id = "water"
+item_id = "portal_shard"
+icon_id = "portal_shard"
 
 [node name="ScreenFader" parent="." instance=ExtResource("9_ede45")]
+
+[node name="InventoryUi" parent="." instance=ExtResource("10_7ts8d")]

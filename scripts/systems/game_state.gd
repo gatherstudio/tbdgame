@@ -14,20 +14,21 @@ var mushroom_count: int = 0
 # ============================================================
 # CORE LOGIC
 # ============================================================
+var inventory: Dictionary = {
+	"banana": 0,
+	"mushroom": 0,
+	"screws": 0,
+	"sea_glass": 0,
+	"portal_shard": 0,
+	"brains": 0
+}
 
-func add_item(item_id: StringName, amount: int = 1) -> void:
-	if amount <= 0:
-		return
+func add_item(item_id: String, amount: int = 1) -> void:
+	if not inventory.has(item_id):
+		inventory[item_id] = 0
 
-	match item_id:
-		&"scrap":
-			scrap_count += amount
-		&"water":
-			water_count += amount
-		&"mushroom":
-			mushroom_count += amount
-		_:
-			push_warning("Unknown item_id: %s" % item_id)
+	inventory[item_id] += amount
+
 
 func reset_all() -> void:
 	scrap_count = 0

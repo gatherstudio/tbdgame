@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://4hduv0ms3q53"]
+
+[ext_resource type="Script" uid="uid://beqowjqp0krxi" path="res://scripts/ui/inventory_slot.gd" id="1_y842j"]
+
+[node name="InventorySlot" type="Panel"]
+script = ExtResource("1_y842j")
+
+[node name="ItemIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CountLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
