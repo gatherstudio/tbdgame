@@ -2,6 +2,9 @@ extends Node2D
 
 @onready var camera: Camera2D = $Camera2D
 @onready var intro_music = $IntroMusic
+@onready var color_rect: ColorRect = $ColorRect
+@onready var hut = $Hut
+
 @onready var player_ghost = $PlayerGhost
 @onready var npc_ghost = $NPCGhost
 
@@ -14,6 +17,7 @@ extends Node2D
 @onready var confirm_button = $DialogueLayer/DialogueBox/ConfirmNameButton
 @onready var advance_button = $DialogueLayer/DialogueBox/AdvanceButton
 
+
 var intro_steps = [
 	{"action":"set_player_down"},
 	{"action":"say","speaker":"thought","text":"Where am I?"},
@@ -22,12 +26,24 @@ var intro_steps = [
 	{"action":"move_npc_in"},
 	{"action":"say","speaker":"npc","text":"What are you doing down here?"},
 	{"action":"say","speaker":"npc","text":"It isn't safe."},
-	{"action":"say","speaker":"npc","text":"The portal exploded not long ago."},
-	{"action":"say","speaker":"npc","text":"Its shards were scattered across the land."},
+	{"action":"say","speaker":"npc","text":"The portal has been dormant for ages, but it exploded not long ago."},
+	{"action":"say","speaker":"npc","text":"It's shards were scattered all across the land."},
+	{"action":"say","speaker":"npc","text":"I came to see what happened."},
 	{"action":"ask_name"},
 	{"action":"say","speaker":"npc","text":"Come with me, {player_name}."},
-	{"action":"walk_offscreen"},
-	{"action":"change_scene","path":"res://scenes/world/WorldSurface.tscn"}
+
+	{"action":"move_to_walk_scene"},
+
+	{"action":"say","speaker":"npc","text":"Long, long ago, your people discovered a mysterious portal in the depths of the earth."},
+	{"action":"say","speaker":"npc","text":"They found out they could send their trash through the portal."},
+	{"action":"say","speaker":"npc","text":"Over hundreds of years, that trash built up."},
+	{"action":"say","speaker":"npc","text":"Trash monsters are now living below ground."},
+	{"action":"say","speaker":"npc","text":"I hide above ground in my hut."},
+	{"action":"say","speaker":"npc","text":"Come on. I'll show you."},
+
+	{"action":"walk_together"},
+	{"action":"say","speaker":"npc","text":"Oh, you want to see for yourself? Here's something to protect yourself... *receives spatula*"},
+	{"action":"change_scene","path":"res://scenes/ui/TitleReveal.tscn"}
 ]
 
 var step_index := 0
@@ -42,71 +58,80 @@ var typing_speed := 0.025
 
 func _ready() -> void:
 	setup_layout()
-	intro_music.play()
-	npc_ghost.play()
+	
+	color_rect.visible = true
+	color_rect.color = Color(0, 0, 0, 1)
+
+	if intro_music:
+		intro_music.play()
+
+	if player_ghost.has_method("play"):
+		player_ghost.play()
+	if npc_ghost.has_method("play"):
+		npc_ghost.play()
+
+	await fade_from_black()
 	run_step()
 
 
 func setup_layout() -> void:
-	# ------------------------------------------------------------
-	# CAMERA / VIEW CENTERING
-	# ------------------------------------------------------------
-	# This is the center point of the intro scene.
-	var scene_center := Vector2(640, 360)
-	camera.position = scene_center
+	# CAMERA
+	camera.enabled = true
+	camera.position = Vector2(640, 360)
+	camera.zoom = Vector2(1, 1)
 
-	# ------------------------------------------------------------
-	# GHOST PLACEMENT
-	# ------------------------------------------------------------
-	# Keep both characters around the center of the screen instead of top-left.
-	player_ghost.position = Vector2(500, 330)
-	npc_ghost.position = Vector2(900, 200)
-
-	# Start player sideways / unconscious.
+	# CHARACTERS
+	player_ghost.position = Vector2(380, 340)
+	npc_ghost.position = Vector2(560, 335)
 	player_ghost.rotation_degrees = 90
 
-	# ------------------------------------------------------------
-	# DIALOGUE BOX PLACEMENT
-	# ------------------------------------------------------------
-	dialogue_box.position = Vector2(1300, 1600)
-	dialogue_box.size = Vector2(1000, 200)
+	# HUT
+	hut.visible = false
+	hut.position = Vector2(1500, 250)
 
-	speaker_label.position = Vector2(24, 14)
-	dialogue_label.position = Vector2(24, 60)
-	dialogue_label.size = Vector2(780, 60)
+	# DIALOGUE UI
+	$DialogueLayer.layer = 10
+	$DialogueLayer.visible = true
 
-	continue_label.position = Vector2(780, 110)
-	continue_label.size = Vector2(190, 20)
+	dialogue_box.visible = true
+	dialogue_box.position = Vector2(110, 500)
+	dialogue_box.size = Vector2(1060, 170)
 
-	name_input.position = Vector2(24, 130)
-	name_input.size = Vector2(300, 34)
+	speaker_label.position = Vector2(20, 10)
+	speaker_label.size = Vector2(260, 24)
 
-	confirm_button.position = Vector2(340, 130)
-	confirm_button.size = Vector2(150, 34)
+	dialogue_label.position = Vector2(20, 42)
+	dialogue_label.size = Vector2(920, 65)
+
+	continue_label.position = Vector2(790, 135)
+	continue_label.size = Vector2(240, 20)
+
+	name_input.position = Vector2(20, 105)
+	name_input.size = Vector2(300, 32)
+
+	confirm_button.position = Vector2(340, 105)
+	confirm_button.size = Vector2(150, 32)
 	confirm_button.text = "Confirm"
 
 	advance_button.position = Vector2(0, 0)
 	advance_button.size = dialogue_box.size
 	advance_button.text = ""
 
-	# ------------------------------------------------------------
-	# UI START STATE
-	# ------------------------------------------------------------
+	speaker_label.add_theme_font_size_override("font_size", 20)
+	dialogue_label.add_theme_font_size_override("font_size", 28)
+	continue_label.add_theme_font_size_override("font_size", 14)
+	name_input.add_theme_font_size_override("font_size", 18)
+	confirm_button.add_theme_font_size_override("font_size", 18)
+
+	speaker_label.modulate = Color(1, 1, 1)
+	dialogue_label.modulate = Color(1, 1, 1)
+	continue_label.modulate = Color(1, 1, 1)
+
 	name_input.visible = false
 	confirm_button.visible = false
 	continue_label.text = ""
 
-	# Make sure the large tap button does not block name entry later.
 	advance_button.mouse_filter = Control.MOUSE_FILTER_STOP
-
-	# ------------------------------------------------------------
-	# FONT SIZES
-	# ------------------------------------------------------------
-	speaker_label.add_theme_font_size_override("font_size", 40)
-	dialogue_label.add_theme_font_size_override("font_size", 40)
-	continue_label.add_theme_font_size_override("font_size", 20)
-	name_input.add_theme_font_size_override("font_size", 20)
-	confirm_button.add_theme_font_size_override("font_size", 20)
 
 
 func run_step() -> void:
@@ -127,6 +152,11 @@ func run_step() -> void:
 
 		"say":
 			show_dialogue(step["speaker"], step["text"])
+
+			# Once the hut scene begins, slowly slide the hut closer on each dialogue line
+			if hut.visible and step_index >= 13:
+				nudge_hut_closer(60.0)
+
 			can_advance = true
 
 		"stand_player_up":
@@ -138,7 +168,7 @@ func run_step() -> void:
 
 		"move_npc_in":
 			busy = true
-			await move_npc()
+			await move_npc_in()
 			busy = false
 			step_index += 1
 			run_step()
@@ -146,20 +176,31 @@ func run_step() -> void:
 		"ask_name":
 			show_name_prompt()
 
-		"walk_offscreen":
+		"move_to_walk_scene":
 			busy = true
 			clear_dialogue()
-			await walk_off()
+			await fade_to_black()
+			await get_tree().create_timer(0.2).timeout
+			await reposition_for_walk_scene()
+			await fade_to_tan()
+			busy = false
+			step_index += 1
+			run_step()
+
+		"walk_together":
+			busy = true
+			await walk_together()
 			busy = false
 			step_index += 1
 			run_step()
 
 		"change_scene":
-			intro_music.stop()
+			if intro_music:
+				intro_music.stop()
 			get_tree().change_scene_to_file(step["path"])
 
 
-func show_dialogue(speaker, text) -> void:
+func show_dialogue(speaker: String, text: String) -> void:
 	var final_text = text.replace("{player_name}", GameState.player_name)
 
 	match speaker:
@@ -187,7 +228,6 @@ func start_typewriter(text: String) -> void:
 	dialogue_label.text = ""
 
 	for i in range(text.length()):
-		# If player clicked while typing, reveal all immediately.
 		if not is_typing:
 			dialogue_label.text = text
 			continue_label.text = "Tap / click / press Enter"
@@ -223,12 +263,10 @@ func advance() -> void:
 	if not can_advance:
 		return
 
-	# First tap finishes the typewriter.
 	if is_typing:
 		finish_typing()
 		return
 
-	# Second tap advances to the next step.
 	can_advance = false
 	step_index += 1
 	run_step()
@@ -248,7 +286,7 @@ func _unhandled_input(event) -> void:
 		return
 
 
-func _on_AdvanceButton_pressed() -> void:
+func _on_advance_button_pressed() -> void:
 	advance()
 
 
@@ -258,18 +296,44 @@ func stand_player() -> void:
 	await tween.finished
 
 
-func move_npc() -> void:
+func move_npc_in() -> void:
 	var tween = create_tween()
-	tween.tween_property(npc_ghost, "position:x", 720, 1.2)
+	tween.tween_property(npc_ghost, "position:x", 760, 1.2)
 	await tween.finished
 
 
-func walk_off() -> void:
+func reposition_for_walk_scene() -> void:
+	player_ghost.rotation_degrees = 0
+	hut.visible = true
+	hut.position = Vector2(1500, 320)
+
 	var tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(player_ghost, "position:x", 2000, 2.0)
-	tween.tween_property(npc_ghost, "position:x", 1740, 2.0)
+	tween.tween_property(player_ghost, "position", Vector2(380, 420), 0.8)
+	tween.tween_property(npc_ghost, "position", Vector2(560, 420), 0.8)
 	await tween.finished
+
+
+func walk_together() -> void:
+	var tween = create_tween()
+	tween.set_parallel(true)
+
+	# characters move a little
+	tween.tween_property(player_ghost, "position:x", 470, 2.5)
+	tween.tween_property(npc_ghost, "position:x", 650, 2.5)
+
+	# hut moves in much more to create the illusion
+	tween.tween_property(hut, "position:x", 860, 2.5)
+
+	await tween.finished
+
+
+func nudge_hut_closer(amount: float = 60.0) -> void:
+	if not hut.visible:
+		return
+
+	var tween = create_tween()
+	tween.tween_property(hut, "position:x", hut.position.x - amount, 0.6)
 
 
 func show_name_prompt() -> void:
@@ -284,7 +348,6 @@ func show_name_prompt() -> void:
 	name_input.text = ""
 	name_input.placeholder_text = "Type your name here"
 
-	# IMPORTANT: disable the big advance button so it doesn't steal clicks.
 	advance_button.visible = false
 	advance_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -293,43 +356,43 @@ func show_name_prompt() -> void:
 	is_typing = false
 
 
-# ============================================================
-# STUDENT DEVELOPER ZONE
-# ============================================================
-# Students:
-# 1. Read the typed name from the input box
-# 2. If blank, use "Traveler"
-# 3. Save it to GameState.player_name
-# 4. Hide the input UI
-# 5. Turn the advance button back on
-# 6. Continue the cutscene
-
-
-func _on_NameInput_text_submitted(_new_text: String) -> void:
+func _on_name_input_text_submitted(_new_text: String) -> void:
 	_on_confirm_name_button_pressed()
 
-func _on_confirm_name_button_pressed() -> void:
 
-	# Get the name the player typed
+func _on_confirm_name_button_pressed() -> void:
 	var typed_name = name_input.text.strip_edges()
 
-	# If the player left it blank, use a default name
 	if typed_name == "":
 		typed_name = "Traveler"
 
-	# Save the name globally so other scenes can use it
 	GameState.player_name = typed_name
 
-	# Hide the name input UI
 	name_input.visible = false
 	confirm_button.visible = false
 
-	# Turn the advance button back on so dialogue can continue
 	advance_button.visible = true
 	advance_button.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	waiting_for_name = false
-
-	# Continue the intro cutscene
 	step_index += 1
 	run_step()
+
+
+func fade_from_black() -> void:
+	var tween = create_tween()
+	tween.tween_property(color_rect, "color", Color(0, 0, 0, 0), 1.5)
+	await tween.finished
+
+
+func fade_to_black() -> void:
+	var tween = create_tween()
+	tween.tween_property(color_rect, "color", Color(0, 0, 0, 1), 0.6)
+	await tween.finished
+
+
+func fade_to_tan() -> void:
+	var tan_color = Color(0.72, 0.69, 0.60, 1.0)
+	var tween = create_tween()
+	tween.tween_property(color_rect, "color", tan_color, 1.2)
+	await tween.finished

@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://doopotro17ug6"]
+
+[ext_resource type="Script" uid="uid://bmbnr7ooqf28l" path="res://scripts/ui/stats_hud.gd" id="1_8mlug"]
+
+[node name="StatsHUD" type="CanvasLayer"]
+script = ExtResource("1_8mlug")
+
+[node name="StatsPanel" type="Panel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StatsVBox" type="VBoxContainer" parent="StatsPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerNameLabel" type="Label" parent="StatsPanel/StatsVBox"]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="StatsPanel/StatsVBox"]
+layout_mode = 2
+
+[node name="AttackLabel" type="Label" parent="StatsPanel/StatsVBox"]
+layout_mode = 2
+
+[node name="WeaponLabel" type="Label" parent="StatsPanel/StatsVBox"]
+layout_mode = 2
+
+[node name="ShardsLabel" type="Label" parent="StatsPanel/StatsVBox"]
+layout_mode = 2

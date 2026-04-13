@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://c4y1yfepgf4kl"]
+
+[ext_resource type="Script" uid="uid://btogos1hdglh2" path="res://scripts/ui/title_reveal.gd" id="1_3uowe"]
+[ext_resource type="Texture2D" uid="uid://crvlbix7ve6u7" path="res://assets/art/ui/title.png" id="2_ufaax"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q0haa"]
+atlas = ExtResource("2_ufaax")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2el8g"]
+atlas = ExtResource("2_ufaax")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jf3r2"]
+atlas = ExtResource("2_ufaax")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gc1me"]
+atlas = ExtResource("2_ufaax")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ddg5l"]
+atlas = ExtResource("2_ufaax")
+region = Rect2(200, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nitm6"]
+atlas = ExtResource("2_ufaax")
+region = Rect2(250, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e1rb3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q0haa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2el8g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jf3r2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gc1me")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ddg5l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nitm6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="TitleReveal" type="Node2D"]
+script = ExtResource("1_3uowe")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -10.0
+offset_right = 1274.0
+offset_bottom = 710.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9019608, 0.8117647, 0.6313726, 1)
+
+[node name="TitleAnimation" type="AnimatedSprite2D" parent="."]
+position = Vector2(630, 352)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_e1rb3")
+frame_progress = 0.78095144
+
+[node name="TitleSound" type="AudioStreamPlayer2D" parent="."]
+
+[node name="HoldTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="HoldTimer" to="." method="_on_hold_timer_timeout"]

@@ -9,6 +9,9 @@ const SLOT_SCENE = preload("res://scenes/ui/InventorySlot.tscn")
 
 var slots: Array = []
 
+# Small inventory for current game scope
+const MAX_SLOTS := 12
+
 var item_icons := {
 	#"banana": preload("res://assets/art/items/banana.png"),
 	"mushroom": preload("res://assets/art/items/mushroom.png"),
@@ -25,36 +28,62 @@ func _ready() -> void:
 	inventory_panel.visible = false
 	refresh_inventory()
 
+
 func setup_layout() -> void:
-	backpack_button.position = Vector2(2400, 20)
-	backpack_button.size = Vector2(300, 100)
-	backpack_button.text = " Inventory "
-	backpack_button.add_theme_font_size_override("font_size", 50)
+	layer = 10
 
-	inventory_panel.position = Vector2(2400, 122)
-	inventory_panel.size = Vector2(600, 600)
+	# -------------------------------------------------
+	# BUTTON
+	# -------------------------------------------------
+	backpack_button.position = Vector2(1135, 18)
+	backpack_button.size = Vector2(130, 42)
+	backpack_button.text = "Inventory"
+	backpack_button.add_theme_font_size_override("font_size", 18)
 
-	title_label.position = Vector2(24, 16)
-	title_label.size = Vector2(260, 40)
-	title_label.text = ""
-	title_label.add_theme_font_size_override("font_size", 40)
+	# -------------------------------------------------
+	# PANEL (tight compact popup)
+	# -------------------------------------------------
+	inventory_panel.position = Vector2(430, 180)
+	inventory_panel.size = Vector2(420, 190)
 
-	grid_container.position = Vector2(40, 70)
-	grid_container.size = Vector2(760, 430)
-	grid_container.columns = 5
-	grid_container.add_theme_constant_override("h_separation", 12)
-	grid_container.add_theme_constant_override("v_separation", 12)
+	# -------------------------------------------------
+	# TITLE
+	# -------------------------------------------------
+	title_label.position = Vector2(16, 10)
+	title_label.size = Vector2(180, 24)
+	title_label.text = "Inventory"
+	title_label.add_theme_font_size_override("font_size", 18)
+
+	# -------------------------------------------------
+	# GRID
+	# -------------------------------------------------
+	grid_container.position = Vector2(18, 42)
+	grid_container.size = Vector2(385, 118)
+
+	grid_container.columns = 6
+
+	grid_container.add_theme_constant_override("h_separation", 8)
+	grid_container.add_theme_constant_override("v_separation", 8)
+
 
 func create_slots() -> void:
-	for i in range(20):
+	# Prevent duplicate slots
+	for child in grid_container.get_children():
+		child.queue_free()
+
+	slots.clear()
+
+	for i in range(MAX_SLOTS):
 		var slot = SLOT_SCENE.instantiate()
 		grid_container.add_child(slot)
 		slots.append(slot)
+
 
 func toggle_inventory() -> void:
 	inventory_panel.visible = not inventory_panel.visible
 	if inventory_panel.visible:
 		refresh_inventory()
+
 
 func refresh_inventory() -> void:
 	for slot in slots:
@@ -66,6 +95,9 @@ func refresh_inventory() -> void:
 		if GameState.inventory[item_id] > 0:
 			item_list.append(item_id)
 
+	# Stable order helps inventory feel less jumpy
+	item_list.sort()
+
 	for i in range(min(item_list.size(), slots.size())):
 		var item_id = item_list[i]
 		var amount = GameState.inventory[item_id]
@@ -73,10 +105,13 @@ func refresh_inventory() -> void:
 
 		if icon != null:
 			slots[i].set_item(icon, amount)
+		else:
+			slots[i].set_empty()
 
 
 func _on_backpack_button_pressed() -> void:
 	toggle_inventory()
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory"):
