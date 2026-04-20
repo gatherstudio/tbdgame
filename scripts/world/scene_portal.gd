@@ -33,7 +33,9 @@ func _on_body_exited(body: Node) -> void:
 func _change_scene() -> void:
 	if destination_scene_path.strip_edges() == "":
 		return
-
+	GameState.underground_easy_monster_defeated = false
+	GameState.should_spawn_underground_easy_monster = true
+	GameState.should_spawn_underground_food = true
 	var fader := get_tree().current_scene.get_node_or_null("ScreenFader")
 	if fader != null:
 		fader.fade_out_then_change_scene(destination_scene_path)

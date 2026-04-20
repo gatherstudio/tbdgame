@@ -35,7 +35,7 @@ func _on_body_entered(body: Node) -> void:
 var item_icons := {
 	"scrap": preload("res://assets/art/items/scrap.png"),
 	"mushroom": preload("res://assets/art/items/mushroom.png"),
-	#"banana": preload("res://assets/art/items/banana.png"),
+	"banana": preload("res://assets/art/items/bananas.png"),
 	#"screws": preload("res://assets/art/items/screws.png"),
 	#"sea_glass": preload("res://assets/art/items/sea_glass.png"),
 	"portal_shard": preload("res://assets/art/items/shards.png"),

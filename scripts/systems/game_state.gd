@@ -21,7 +21,7 @@ var armor_level: int = 0
 # ==================================================
 # CORE INVENTORY
 # ==================================================
-
+var should_spawn_underground_food: bool = true
 var inventory: Dictionary = {
 	"banana": 0,
 	"mushroom": 0,
@@ -30,6 +30,16 @@ var inventory: Dictionary = {
 	"portal_shard": 0,
 	"brains": 0
 }
+
+# ==================================================
+# BATTLE / SCENE STATE
+# ==================================================
+
+var return_scene_path: String = ""
+var last_battle_result: String = ""   # "win", "lose", or ""
+var underground_easy_monster_defeated: bool = false
+var should_spawn_underground_easy_monster: bool = true
+var easy_level_shards_claimed: bool = false
 
 # ==================================================
 # CORE INVENTORY FUNCTIONS
@@ -63,6 +73,11 @@ func get_item_count(item_id: String) -> int:
 func has_item(item_id: String, amount: int = 1) -> bool:
 	return get_item_count(item_id) >= amount
 
+# ==================================================
+# FULL RESET
+# Use only for new game / hard reset
+# NOT for normal battle loss
+# ==================================================
 
 func reset_all() -> void:
 	player_name = "Player"
@@ -83,6 +98,13 @@ func reset_all() -> void:
 		"portal_shard": 0,
 		"brains": 0
 	}
+
+	return_scene_path = ""
+	last_battle_result = ""
+	underground_easy_monster_defeated = false
+	should_spawn_underground_easy_monster = true
+	easy_level_shards_claimed = false
+	should_spawn_underground_food = true
 
 # ==================================================
 # HEALTH FUNCTIONS
@@ -107,6 +129,23 @@ func is_dead() -> bool:
 func set_max_health(value: int) -> void:
 	max_health = value
 	current_health = min(current_health, max_health)
+
+# ==================================================
+# RESPAWN / BATTLE HELPERS
+# Use this after losing a normal battle
+# Keeps inventory, upgrades, etc.
+# ==================================================
+
+func respawn_player() -> void:
+	current_health = max_health
+
+
+func set_battle_result(result: String) -> void:
+	last_battle_result = result
+
+
+func clear_battle_result() -> void:
+	last_battle_result = ""
 
 # ==================================================
 # ITEM USE

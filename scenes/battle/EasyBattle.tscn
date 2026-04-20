@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctsn6rg652xeu"]
+
+[ext_resource type="Script" uid="uid://cxwkxyma5t4r8" path="res://scripts/battle/easy_battle.gd" id="1_nyd2u"]
+[ext_resource type="Texture2D" uid="uid://gy5uhedm10iy" path="res://assets/art/characters/EasyMonster.png" id="2_2isgi"]
+
+[node name="EasyBattle" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_nyd2u")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 2000.0
+offset_bottom = 1000.0
+
+[node name="BattlePanel" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GroundLine" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerHealthLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="MonsterHealthLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 116.0
+offset_right = 204.0
+offset_bottom = 139.0
+
+[node name="BattleText" type="Label" parent="."]
+layout_mode = 0
+offset_left = 204.0
+offset_top = 135.0
+offset_right = 244.0
+offset_bottom = 158.0
+
+[node name="MonsterSprite" type="Sprite2D" parent="."]
+position = Vector2(233, 124)
+scale = Vector2(2, 2)
+texture = ExtResource("2_2isgi")
+
+[node name="AttackButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 349.0
+offset_top = 254.0
+offset_right = 407.0
+offset_bottom = 285.0
+text = "Attack"
+
+[node name="MushroomButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 294.0
+offset_top = 253.0
+offset_right = 337.0
+offset_bottom = 284.0
+text = "Heal"
+
+[node name="BananaButton" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
