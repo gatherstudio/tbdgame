@@ -23,7 +23,7 @@ This version is intentionally simple:
 
 # Animation names used by PlayerSprite
 @export var idle_animation_name: String = "float"
-@export var walk_animation_name: String = "float"
+@export var walk_animation_name: String = "walk"
 
 # ============================================================
 # CORE LOGIC

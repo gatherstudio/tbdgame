@@ -1,16 +1,60 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0y061s368gcg"]
+[gd_scene load_steps=11 format=3 uid="uid://c0y061s368gcg"]
 
 [ext_resource type="Script" uid="uid://gnsuusuypydm" path="res://scripts/actors/player.gd" id="1_8iu4y"]
-[ext_resource type="Texture2D" uid="uid://cumjckvsr6484" path="res://assets/art/characters/maincharacter.png" id="2_8iu4y"]
+[ext_resource type="Texture2D" uid="uid://bo4ut0bibtbme" path="res://assets/art/characters/walkingmain.png" id="2_8iu4y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_df4lg"]
+atlas = ExtResource("2_8iu4y")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vtocr"]
+atlas = ExtResource("2_8iu4y")
+region = Rect2(0, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pe48s"]
+atlas = ExtResource("2_8iu4y")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5niig"]
+atlas = ExtResource("2_8iu4y")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4aj10"]
+atlas = ExtResource("2_8iu4y")
+region = Rect2(150, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cbt8o"]
+atlas = ExtResource("2_8iu4y")
+region = Rect2(200, 0, 50, 50)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ttitt"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_8iu4y")
+"texture": SubResource("AtlasTexture_df4lg")
 }],
 "loop": true,
 "name": &"float",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vtocr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pe48s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5niig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4aj10")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cbt8o")
+}],
+"loop": true,
+"name": &"walk",
 "speed": 5.0
 }]
 
@@ -26,7 +70,7 @@ light_mask = 7
 visibility_layer = 7
 position = Vector2(16, 4)
 sprite_frames = SubResource("SpriteFrames_ttitt")
-animation = &"float"
+animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(15, 6)

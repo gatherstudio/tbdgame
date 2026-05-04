@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfxj3tci7c7sm"]
+
+[ext_resource type="Script" uid="uid://b8vkjeki48sdi" path="res://scripts/ui/blacksmith_ui.gd" id="1_4mobo"]
+[ext_resource type="Texture2D" uid="uid://dg8altlqi6giu" path="res://assets/art/characters/blacksmith.png" id="1_lea8m"]
+
+[node name="BlacksmithUi" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_4mobo")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BlacksmithPanel" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BlacksmithPortrait" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_lea8m")
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="DialogueLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="MaterialsLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="UpgradeButton" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="LeaveButton" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

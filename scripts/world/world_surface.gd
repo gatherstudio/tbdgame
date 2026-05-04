@@ -29,7 +29,7 @@ func _spawn_food_if_needed() -> void:
 
 		spawned_food_positions.append(pos)
 
-	GameState.should_spawn_underground_food = false
+	GameState.should_spawn_underground_food = true
 
 func _setup_random_food_pickup(pickup) -> void:
 	# 80% mushroom, 20% banana

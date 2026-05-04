@@ -1,13 +1,20 @@
 extends Node2D
 
+# ==================================================
+# SCENE NODES
+# Keep these node names in the scene:
+# PlayerGhost, NPCGhost, Hut, DialogueLayer, etc.
+# ==================================================
+
 @onready var camera: Camera2D = $Camera2D
 @onready var intro_music = $IntroMusic
-@onready var color_rect: ColorRect = $ColorRect
+@onready var fade_rect: ColorRect = $ColorRect
 @onready var hut = $Hut
 
-@onready var player_ghost = $PlayerGhost
-@onready var npc_ghost = $NPCGhost
+@onready var player_sprite: AnimatedSprite2D = $PlayerGhost
+@onready var scavenger_sprite: AnimatedSprite2D = $NPCGhost
 
+@onready var dialogue_layer = $DialogueLayer
 @onready var dialogue_box = $DialogueLayer/DialogueBox
 @onready var speaker_label = $DialogueLayer/DialogueBox/SpeakerLabel
 @onready var dialogue_label = $DialogueLayer/DialogueBox/DialogueLabel
@@ -17,33 +24,44 @@ extends Node2D
 @onready var confirm_button = $DialogueLayer/DialogueBox/ConfirmNameButton
 @onready var advance_button = $DialogueLayer/DialogueBox/AdvanceButton
 
+# ==================================================
+# ANIMATION NAMES
+# Update these if the student animation names are different.
+# ==================================================
+
+@export var idle_animation_name: String = "float"
+@export var walk_animation_name: String = "walk"
+
+# ==================================================
+# INTRO STEPS
+# ==================================================
 
 var intro_steps = [
-	{"action":"set_player_down"},
-	{"action":"say","speaker":"thought","text":"Where am I?"},
-	{"action":"say","speaker":"thought","text":"How do I get home?"},
-	{"action":"stand_player_up"},
-	{"action":"move_npc_in"},
-	{"action":"say","speaker":"npc","text":"What are you doing down here?"},
-	{"action":"say","speaker":"npc","text":"It isn't safe."},
-	{"action":"say","speaker":"npc","text":"The portal has been dormant for ages, but it exploded not long ago."},
-	{"action":"say","speaker":"npc","text":"It's shards were scattered all across the land."},
-	{"action":"say","speaker":"npc","text":"I came to see what happened."},
-	{"action":"ask_name"},
-	{"action":"say","speaker":"npc","text":"Come with me, {player_name}."},
+	{"action": "set_player_down"},
+	{"action": "say", "speaker": "thought", "text": "Where am I?"},
+	{"action": "say", "speaker": "thought", "text": "How do I get home?"},
+	{"action": "stand_player_up"},
+	{"action": "move_scavenger_in"},
+	{"action": "say", "speaker": "npc", "text": "What are you doing down here?"},
+	{"action": "say", "speaker": "npc", "text": "It isn't safe."},
+	{"action": "say", "speaker": "npc", "text": "The portal has been dormant for ages, but it exploded not long ago."},
+	{"action": "say", "speaker": "npc", "text": "Its shards were scattered all across the land."},
+	{"action": "say", "speaker": "npc", "text": "I came to see what happened."},
+	{"action": "ask_name"},
+	{"action": "say", "speaker": "npc", "text": "Come with me, {player_name}."},
 
-	{"action":"move_to_walk_scene"},
+	{"action": "move_to_walk_scene"},
 
-	{"action":"say","speaker":"npc","text":"Long, long ago, your people discovered a mysterious portal in the depths of the earth."},
-	{"action":"say","speaker":"npc","text":"They found out they could send their trash through the portal."},
-	{"action":"say","speaker":"npc","text":"Over hundreds of years, that trash built up."},
-	{"action":"say","speaker":"npc","text":"Trash monsters are now living below ground."},
-	{"action":"say","speaker":"npc","text":"I hide above ground in my hut."},
-	{"action":"say","speaker":"npc","text":"Come on. I'll show you."},
+	{"action": "say", "speaker": "npc", "text": "Long, long ago, your people discovered a mysterious portal in the depths of the earth."},
+	{"action": "say", "speaker": "npc", "text": "They found out they could send their trash through the portal."},
+	{"action": "say", "speaker": "npc", "text": "Over hundreds of years, that trash built up."},
+	{"action": "say", "speaker": "npc", "text": "Trash monsters are now living below ground."},
+	{"action": "say", "speaker": "npc", "text": "I hide above ground in my hut."},
+	{"action": "say", "speaker": "npc", "text": "Come on. I'll show you."},
 
-	{"action":"walk_together"},
-	{"action":"say","speaker":"npc","text":"Oh, you want to see for yourself? Here's something to protect yourself... *receives spatula*"},
-	{"action":"change_scene","path":"res://scenes/ui/TitleReveal.tscn"}
+	{"action": "walk_together"},
+	{"action": "say", "speaker": "npc", "text": "Oh, you want to see for yourself? Here's something to protect yourself... *receives spatula*"},
+	{"action": "change_scene", "path": "res://scenes/ui/TitleReveal.tscn"}
 ]
 
 var step_index := 0
@@ -55,43 +73,44 @@ var full_line_text := ""
 var is_typing := false
 var typing_speed := 0.025
 
+# ==================================================
+# READY
+# ==================================================
 
 func _ready() -> void:
 	setup_layout()
-	
-	color_rect.visible = true
-	color_rect.color = Color(0, 0, 0, 1)
+
+	fade_rect.visible = true
+	fade_rect.color = Color(0, 0, 0, 1)
 
 	if intro_music:
 		intro_music.play()
 
-	if player_ghost.has_method("play"):
-		player_ghost.play()
-	if npc_ghost.has_method("play"):
-		npc_ghost.play()
+	_play_animation(player_sprite, idle_animation_name)
+	_play_animation(scavenger_sprite, idle_animation_name)
 
 	await fade_from_black()
 	run_step()
 
+# ==================================================
+# LAYOUT
+# ==================================================
 
 func setup_layout() -> void:
-	# CAMERA
 	camera.enabled = true
 	camera.position = Vector2(640, 360)
 	camera.zoom = Vector2(1, 1)
 
-	# CHARACTERS
-	player_ghost.position = Vector2(380, 340)
-	npc_ghost.position = Vector2(560, 335)
-	player_ghost.rotation_degrees = 90
+	player_sprite.position = Vector2(380, 340)
+	scavenger_sprite.position = Vector2(560, 335)
 
-	# HUT
+	player_sprite.rotation_degrees = 90
+
 	hut.visible = false
 	hut.position = Vector2(1500, 250)
 
-	# DIALOGUE UI
-	$DialogueLayer.layer = 10
-	$DialogueLayer.visible = true
+	dialogue_layer.layer = 10
+	dialogue_layer.visible = true
 
 	dialogue_box.visible = true
 	dialogue_box.position = Vector2(110, 500)
@@ -123,9 +142,9 @@ func setup_layout() -> void:
 	name_input.add_theme_font_size_override("font_size", 18)
 	confirm_button.add_theme_font_size_override("font_size", 18)
 
-	speaker_label.modulate = Color(1, 1, 1)
-	dialogue_label.modulate = Color(1, 1, 1)
-	continue_label.modulate = Color(1, 1, 1)
+	speaker_label.modulate = Color.WHITE
+	dialogue_label.modulate = Color.WHITE
+	continue_label.modulate = Color.WHITE
 
 	name_input.visible = false
 	confirm_button.visible = false
@@ -133,6 +152,9 @@ func setup_layout() -> void:
 
 	advance_button.mouse_filter = Control.MOUSE_FILTER_STOP
 
+# ==================================================
+# STEP RUNNER
+# ==================================================
 
 func run_step() -> void:
 	if step_index >= intro_steps.size():
@@ -146,14 +168,14 @@ func run_step() -> void:
 
 	match action:
 		"set_player_down":
-			player_ghost.rotation_degrees = 90
+			player_sprite.rotation_degrees = 90
+			_play_animation(player_sprite, idle_animation_name)
 			step_index += 1
 			run_step()
 
 		"say":
 			show_dialogue(step["speaker"], step["text"])
 
-			# Once the hut scene begins, slowly slide the hut closer on each dialogue line
 			if hut.visible and step_index >= 13:
 				nudge_hut_closer(60.0)
 
@@ -166,9 +188,9 @@ func run_step() -> void:
 			step_index += 1
 			run_step()
 
-		"move_npc_in":
+		"move_scavenger_in":
 			busy = true
-			await move_npc_in()
+			await move_scavenger_in()
 			busy = false
 			step_index += 1
 			run_step()
@@ -197,8 +219,12 @@ func run_step() -> void:
 		"change_scene":
 			if intro_music:
 				intro_music.stop()
+
 			get_tree().change_scene_to_file(step["path"])
 
+# ==================================================
+# DIALOGUE
+# ==================================================
 
 func show_dialogue(speaker: String, text: String) -> void:
 	var final_text = text.replace("{player_name}", GameState.player_name)
@@ -208,20 +234,21 @@ func show_dialogue(speaker: String, text: String) -> void:
 			speaker_label.text = "Thought"
 			speaker_label.modulate = Color(0.8, 0.95, 1.0)
 			dialogue_label.modulate = Color(0.8, 0.95, 1.0)
+
 		"npc":
 			speaker_label.text = "Scavenger"
-			speaker_label.modulate = Color(1, 1, 1)
-			dialogue_label.modulate = Color(1, 1, 1)
+			speaker_label.modulate = Color.WHITE
+			dialogue_label.modulate = Color.WHITE
+
 		_:
 			speaker_label.text = ""
-			speaker_label.modulate = Color(1, 1, 1)
-			dialogue_label.modulate = Color(1, 1, 1)
+			speaker_label.modulate = Color.WHITE
+			dialogue_label.modulate = Color.WHITE
 
 	full_line_text = final_text
 	dialogue_label.text = ""
 	continue_label.text = ""
 	start_typewriter(final_text)
-
 
 func start_typewriter(text: String) -> void:
 	is_typing = true
@@ -239,19 +266,16 @@ func start_typewriter(text: String) -> void:
 	is_typing = false
 	continue_label.text = "Tap / click / press Enter"
 
-
 func finish_typing() -> void:
 	if is_typing:
 		is_typing = false
 		dialogue_label.text = full_line_text
 		continue_label.text = "Tap / click / press Enter"
 
-
 func clear_dialogue() -> void:
 	speaker_label.text = ""
 	dialogue_label.text = ""
 	continue_label.text = ""
-
 
 func advance() -> void:
 	if busy:
@@ -271,6 +295,9 @@ func advance() -> void:
 	step_index += 1
 	run_step()
 
+# ==================================================
+# INPUT
+# ==================================================
 
 func _unhandled_input(event) -> void:
 	if event.is_action_pressed("ui_accept"):
@@ -285,48 +312,81 @@ func _unhandled_input(event) -> void:
 		advance()
 		return
 
-
 func _on_advance_button_pressed() -> void:
 	advance()
 
+# ==================================================
+# CHARACTER ANIMATION HELPERS
+# ==================================================
+
+func _play_animation(sprite: AnimatedSprite2D, animation_name: String) -> void:
+	if sprite == null:
+		return
+
+	if sprite.sprite_frames == null:
+		return
+
+	if sprite.sprite_frames.has_animation(animation_name):
+		if sprite.animation != animation_name:
+			sprite.play(animation_name)
+
+func _set_character_walking(sprite: AnimatedSprite2D) -> void:
+	_play_animation(sprite, walk_animation_name)
+
+func _set_character_idle(sprite: AnimatedSprite2D) -> void:
+	_play_animation(sprite, idle_animation_name)
+
+# ==================================================
+# INTRO MOVEMENT
+# ==================================================
 
 func stand_player() -> void:
+	_set_character_idle(player_sprite)
+
 	var tween = create_tween()
-	tween.tween_property(player_ghost, "rotation_degrees", 0, 0.45)
+	tween.tween_property(player_sprite, "rotation_degrees", 0, 0.45)
 	await tween.finished
 
+func move_scavenger_in() -> void:
+	_set_character_walking(scavenger_sprite)
+	scavenger_sprite.flip_h = false
 
-func move_npc_in() -> void:
 	var tween = create_tween()
-	tween.tween_property(npc_ghost, "position:x", 760, 1.2)
+	tween.tween_property(scavenger_sprite, "position:x", 760, 1.2)
 	await tween.finished
 
+	_set_character_idle(scavenger_sprite)
 
 func reposition_for_walk_scene() -> void:
-	player_ghost.rotation_degrees = 0
+	player_sprite.rotation_degrees = 0
+
 	hut.visible = true
 	hut.position = Vector2(1500, 320)
 
 	var tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(player_ghost, "position", Vector2(380, 420), 0.8)
-	tween.tween_property(npc_ghost, "position", Vector2(560, 420), 0.8)
+	tween.tween_property(player_sprite, "position", Vector2(380, 420), 0.8)
+	tween.tween_property(scavenger_sprite, "position", Vector2(560, 420), 0.8)
 	await tween.finished
 
-
 func walk_together() -> void:
+	_set_character_walking(player_sprite)
+	_set_character_walking(scavenger_sprite)
+
+	player_sprite.flip_h = false
+	scavenger_sprite.flip_h = false
+
 	var tween = create_tween()
 	tween.set_parallel(true)
 
-	# characters move a little
-	tween.tween_property(player_ghost, "position:x", 470, 2.5)
-	tween.tween_property(npc_ghost, "position:x", 650, 2.5)
-
-	# hut moves in much more to create the illusion
+	tween.tween_property(player_sprite, "position:x", 470, 2.5)
+	tween.tween_property(scavenger_sprite, "position:x", 650, 2.5)
 	tween.tween_property(hut, "position:x", 860, 2.5)
 
 	await tween.finished
 
+	_set_character_idle(player_sprite)
+	_set_character_idle(scavenger_sprite)
 
 func nudge_hut_closer(amount: float = 60.0) -> void:
 	if not hut.visible:
@@ -335,11 +395,14 @@ func nudge_hut_closer(amount: float = 60.0) -> void:
 	var tween = create_tween()
 	tween.tween_property(hut, "position:x", hut.position.x - amount, 0.6)
 
+# ==================================================
+# NAME INPUT
+# ==================================================
 
 func show_name_prompt() -> void:
 	speaker_label.text = "Scavenger"
-	speaker_label.modulate = Color(1, 1, 1)
-	dialogue_label.modulate = Color(1, 1, 1)
+	speaker_label.modulate = Color.WHITE
+	dialogue_label.modulate = Color.WHITE
 	dialogue_label.text = "Wait... what is your name?"
 	continue_label.text = ""
 
@@ -355,10 +418,8 @@ func show_name_prompt() -> void:
 	waiting_for_name = true
 	is_typing = false
 
-
 func _on_name_input_text_submitted(_new_text: String) -> void:
 	_on_confirm_name_button_pressed()
-
 
 func _on_confirm_name_button_pressed() -> void:
 	var typed_name = name_input.text.strip_edges()
@@ -378,21 +439,22 @@ func _on_confirm_name_button_pressed() -> void:
 	step_index += 1
 	run_step()
 
+# ==================================================
+# FADES
+# ==================================================
 
 func fade_from_black() -> void:
 	var tween = create_tween()
-	tween.tween_property(color_rect, "color", Color(0, 0, 0, 0), 1.5)
+	tween.tween_property(fade_rect, "color", Color(0, 0, 0, 0), 1.5)
 	await tween.finished
-
 
 func fade_to_black() -> void:
 	var tween = create_tween()
-	tween.tween_property(color_rect, "color", Color(0, 0, 0, 1), 0.6)
+	tween.tween_property(fade_rect, "color", Color(0, 0, 0, 1), 0.6)
 	await tween.finished
-
 
 func fade_to_tan() -> void:
 	var tan_color = Color(0.72, 0.69, 0.60, 1.0)
 	var tween = create_tween()
-	tween.tween_property(color_rect, "color", tan_color, 1.2)
+	tween.tween_property(fade_rect, "color", tan_color, 1.2)
 	await tween.finished

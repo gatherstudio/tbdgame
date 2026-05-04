@@ -17,7 +17,8 @@ var item_icons := {
 	"mushroom": preload("res://assets/art/items/mushroom.png"),
 	"portal_shard": preload("res://assets/art/items/shards.png"),
 	"brains": preload("res://assets/art/items/brains.png"),
-	"cans": preload("res://assets/art/items/can.png")
+	"cans": preload("res://assets/art/items/can.png"),
+	"screws": preload("res://assets/art/items/screw.png")
 }
 
 func _ready() -> void:
@@ -25,6 +26,7 @@ func _ready() -> void:
 	create_slots()
 	inventory_panel.visible = false
 	refresh_inventory()
+
 
 func setup_layout() -> void:
 	layer = 10
@@ -40,8 +42,6 @@ func setup_layout() -> void:
 	backpack_button.icon = BAG_ICON
 	backpack_button.expand_icon = true
 	backpack_button.flat = true
-
-	# optional: cleaner icon-only feel
 	backpack_button.clip_text = false
 	backpack_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
@@ -55,7 +55,7 @@ func setup_layout() -> void:
 	# TITLE
 	# -------------------------------------------------
 	title_label.position = Vector2(16, 10)
-	title_label.size = Vector2(180, 24)
+	title_label.size = Vector2(300, 24)
 	title_label.text = "Inventory"
 	title_label.add_theme_font_size_override("font_size", 18)
 
@@ -68,6 +68,7 @@ func setup_layout() -> void:
 	grid_container.add_theme_constant_override("h_separation", 8)
 	grid_container.add_theme_constant_override("v_separation", 8)
 
+
 func create_slots() -> void:
 	for child in grid_container.get_children():
 		child.queue_free()
@@ -79,10 +80,17 @@ func create_slots() -> void:
 		grid_container.add_child(slot)
 		slots.append(slot)
 
+		# Listen for clicks from each slot
+		slot.slot_clicked.connect(_on_inventory_slot_clicked)
+
+
 func toggle_inventory() -> void:
 	inventory_panel.visible = not inventory_panel.visible
+
 	if inventory_panel.visible:
+		title_label.text = "Inventory"
 		refresh_inventory()
+
 
 func refresh_inventory() -> void:
 	for slot in slots:
@@ -102,12 +110,43 @@ func refresh_inventory() -> void:
 		var icon = item_icons.get(item_id, null)
 
 		if icon != null:
-			slots[i].set_item(icon, amount)
+			# Important: pass item_id into the slot
+			slots[i].set_item(icon, amount, item_id)
 		else:
 			slots[i].set_empty()
 
+
+func _on_inventory_slot_clicked(item_id: String) -> void:
+	match item_id:
+		"mushroom":
+			var used := GameState.use_item("mushroom")
+
+			if used:
+				title_label.text = "Ate mushroom (+2 HP)"
+				_play_eat_sound()
+				refresh_inventory()
+
+		"banana":
+			var used := GameState.use_item("banana")
+
+			if used:
+				title_label.text = "Ate banana (full heal)"
+				_play_eat_sound()
+				refresh_inventory()
+
+		_:
+			title_label.text = "Can't eat that"
+
+
+func _play_eat_sound() -> void:
+	if has_node("EatSound"):
+		$EatSound.stop()
+		$EatSound.play()
+
+
 func _on_backpack_button_pressed() -> void:
 	toggle_inventory()
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory"):

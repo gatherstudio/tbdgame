@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=4 uid="uid://dsuyulrgshs2c"]
+[gd_scene load_steps=67 format=4 uid="uid://dsuyulrgshs2c"]
 
 [ext_resource type="Script" uid="uid://lkx6xvj3a8s" path="res://scripts/world/world_surface.gd" id="1_6yg5k"]
 [ext_resource type="PackedScene" uid="uid://c0y061s368gcg" path="res://scenes/actors/Player.tscn" id="1_mp8f5"]
@@ -29,6 +29,7 @@
 [ext_resource type="Texture2D" uid="uid://y4aobo4k7yhq" path="res://assets/art/tilesets/under5.png" id="17_4jgep"]
 [ext_resource type="Texture2D" uid="uid://blr5jubom1qxx" path="res://assets/art/tilesets/under6.png" id="18_l77a4"]
 [ext_resource type="Texture2D" uid="uid://byh3wlc283mbn" path="res://assets/art/tilesets/uturn.png" id="24_psuir"]
+[ext_resource type="Script" uid="uid://c1pcutwk30cr7" path="res://scripts/ui/blacksmith_trigger.gd" id="26_s8gie"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6eebf"]
 texture = ExtResource("2_6hmjp")
@@ -23128,10 +23129,14 @@ sources/6 = SubResource("TileSetAtlasSource_leprd")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mp8f5"]
 size = Vector2(24.859375, 25.328125)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c6no0"]
+size = Vector2(61, 33)
+
 [node name="WorldSurface" type="Node2D"]
 script = ExtResource("1_6yg5k")
 
 [node name="Player" parent="." instance=ExtResource("1_mp8f5")]
+z_index = 5
 stop_distance = 4.0
 
 [node name="Ground" type="TileMapLayer" parent="."]
@@ -23144,7 +23149,7 @@ collision_enabled = false
 navigation_visibility_mode = 1
 
 [node name="Portal" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AADf/+X/AQAAAAAAAADf/+b/AQAAAAEAAADf/+f/AQAAAAIAAADf/+j/AQAAAAMAAADg/+X/AQABAAAAAADg/+b/AQABAAEAAADg/+f/AQABAAIAAADg/+j/AQABAAMAAADh/+X/AQACAAAAAADh/+b/AQACAAEAAADh/+f/AQACAAIAAADh/+j/AQACAAMAAADi/+X/AQADAAAAAADi/+b/AQADAAEAAADi/+f/AQADAAIAAADi/+j/AQADAAMAAAAGAPn/AwAAAAEAAAAGAPr/AwAAAAIAAAAGAPv/AwAAAAMAAAAHAPj/AwABAAAAAAAHAPn/AwABAAEAAAAHAPr/AwABAAIAAAAHAPv/AwABAAMAAAAIAPj/AwACAAAAAAAIAPn/AwACAAEAAAAIAPr/AwACAAIAAAAIAPv/AwACAAMAAAAJAPj/AwADAAAAAAAJAPn/AwADAAEAAAAJAPr/AwADAAIAAAAJAPv/AwADAAMAAAAEAPr/AgAAAAAAAAAEAPv/AgAAAAEAAAAFAPr/AgABAAAAAAAFAPv/AgABAAEAAAAKAPr/AgAAAAAAAAAKAPv/AgAAAAEAAAALAPr/AgABAAAAAAALAPv/AgABAAEAAAADAP//BAAAAAAAAAADAAAABAAAAAEAAAAEAP//BAABAAAAAAAEAAAABAABAAEAAAA=")
+tile_map_data = PackedByteArray("AADf/+X/AQAAAAAAAADf/+b/AQAAAAEAAADf/+f/AQAAAAIAAADf/+j/AQAAAAMAAADg/+X/AQABAAAAAADg/+b/AQABAAEAAADg/+f/AQABAAIAAADg/+j/AQABAAMAAADh/+X/AQACAAAAAADh/+b/AQACAAEAAADh/+f/AQACAAIAAADh/+j/AQACAAMAAADi/+X/AQADAAAAAADi/+b/AQADAAEAAADi/+f/AQADAAIAAADi/+j/AQADAAMAAAADAP//BAAAAAAAAAADAAAABAAAAAEAAAAEAP//BAABAAAAAAAEAAAABAABAAEAAAA=")
 tile_set = SubResource("TileSet_poelh")
 
 [node name="Portals" type="Node2D" parent="."]
@@ -23156,6 +23161,19 @@ script = ExtResource("3_6hmjp")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Portals/ToUnderground"]
 position = Vector2(-247, -199.5)
 shape = SubResource("RectangleShape2D_mp8f5")
+
+[node name="BlacksmithCottage" type="Node2D" parent="."]
+
+[node name="Cottage" type="Sprite2D" parent="BlacksmithCottage"]
+position = Vector2(125, -144)
+texture = ExtResource("14_6yg5k")
+
+[node name="Area2D" type="Area2D" parent="BlacksmithCottage"]
+script = ExtResource("26_s8gie")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BlacksmithCottage/Area2D"]
+position = Vector2(126.5, -132.5)
+shape = SubResource("RectangleShape2D_c6no0")
 
 [node name="ScreenFader" parent="." instance=ExtResource("10_qqos5")]
 

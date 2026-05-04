@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://1y6fdpoewt6t"]
+[gd_scene load_steps=3 format=3 uid="uid://1y6fdpoewt6t"]
 
 [ext_resource type="Script" uid="uid://ccw2rogtlplvb" path="res://scripts/ui/inventory_ui.gd" id="1_p0ay3"]
+[ext_resource type="AudioStream" uid="uid://cosyntyfshjsu" path="res://assets/audio/sfx/Eat.mp3" id="2_jywan"]
 
 [node name="InventoryUi" type="CanvasLayer"]
 script = ExtResource("1_p0ay3")
@@ -22,5 +23,8 @@ offset_bottom = 23.0
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="EatSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_jywan")
 
 [connection signal="pressed" from="BackpackButton" to="." method="_on_backpack_button_pressed"]
