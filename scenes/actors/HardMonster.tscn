@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://ore68ylkc114"]
+
+[ext_resource type="Script" uid="uid://balnlx2tinwmh" path="res://scripts/actors/BattleMonster.gd" id="1_e3rhm"]
+[ext_resource type="Texture2D" uid="uid://dcl3nn0w1rwem" path="res://assets/art/characters/hard.png" id="2_w0uc8"]
+[ext_resource type="AudioStream" uid="uid://dr4qx7myolsxw" path="res://assets/audio/sfx/WastePaperMonster El (1).mp3" id="3_3oh0r"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ctyhg"]
+radius = 21.0
+height = 44.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hvfba"]
+size = Vector2(62, 51)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m1ayp"]
+radius = 121.016525
+
+[node name="HardMonster" type="CharacterBody2D"]
+script = ExtResource("1_e3rhm")
+monster_name = "Hard Trash Beast"
+monster_level = 3
+monster_max_health = 25
+monster_damage = 15
+monster_crit_chance = 0.2
+drop_item = "sea_glass"
+drop_amount = 1
+bonus_mushroom_amount = 20
+bonus_banana_amount = 20
+bonus_screws_amount = 5
+bonus_cans_amount = 2
+return_scene_path = "res://scenes/world/WorldUndergroundHard.tscn"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_w0uc8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5, 3)
+shape = SubResource("CapsuleShape2D_ctyhg")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(-5, 2.5)
+shape = SubResource("RectangleShape2D_hvfba")
+
+[node name="NearSoundZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NearSoundZone"]
+position = Vector2(-5, 4)
+shape = SubResource("CircleShape2D_m1ayp")
+
+[node name="MonsterNearSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_3oh0r")
+volume_db = -18.474

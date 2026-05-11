@@ -78,4 +78,12 @@ frame_progress = 0.78095144
 
 [node name="HoldTimer" type="Timer" parent="."]
 
+[node name="NewGameButton" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="ContinueButton" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+
 [connection signal="timeout" from="HoldTimer" to="." method="_on_hold_timer_timeout"]

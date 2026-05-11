@@ -18,7 +18,8 @@ var item_icons := {
 	"portal_shard": preload("res://assets/art/items/shards.png"),
 	"brains": preload("res://assets/art/items/brains.png"),
 	"cans": preload("res://assets/art/items/can.png"),
-	"screws": preload("res://assets/art/items/screw.png")
+	"screws": preload("res://assets/art/items/screw.png"),
+	"sea_glass": preload("res://assets/art/items/seaglass.png")
 }
 
 func _ready() -> void:

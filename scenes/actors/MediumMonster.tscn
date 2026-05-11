@@ -1,0 +1,91 @@
+[gd_scene load_steps=13 format=3 uid="uid://da5rgtlelv7l3"]
+
+[ext_resource type="Script" uid="uid://balnlx2tinwmh" path="res://scripts/actors/BattleMonster.gd" id="1_mwt8b"]
+[ext_resource type="Texture2D" uid="uid://c21uyjeuvx1w4" path="res://assets/art/characters/MediumMonster.png" id="2_msylh"]
+[ext_resource type="AudioStream" uid="uid://cffu03t3vj3b7" path="res://assets/audio/sfx/mediumtrashwalk.mp3" id="3_lf86h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj160"]
+atlas = ExtResource("2_msylh")
+region = Rect2(0, 0, 78, 78)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r3lam"]
+atlas = ExtResource("2_msylh")
+region = Rect2(78, 0, 78, 78)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iyaig"]
+atlas = ExtResource("2_msylh")
+region = Rect2(156, 0, 78, 78)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3exu"]
+atlas = ExtResource("2_msylh")
+region = Rect2(234, 0, 78, 78)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwn15"]
+atlas = ExtResource("2_msylh")
+region = Rect2(312, 0, 78, 78)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x3pxs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj160")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r3lam")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iyaig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s3exu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwn15")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ctyhg"]
+radius = 21.0
+height = 44.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hvfba"]
+size = Vector2(62, 51)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m1ayp"]
+radius = 155.0516
+
+[node name="MediumMonster" type="CharacterBody2D"]
+script = ExtResource("1_mwt8b")
+bonus_mushroom_amount = 10
+bonus_banana_amount = 10
+bonus_screws_amount = 5
+bonus_cans_amount = 1
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(19, -86)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_x3pxs")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5, 3)
+shape = SubResource("CapsuleShape2D_ctyhg")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(-5, 2.5)
+shape = SubResource("RectangleShape2D_hvfba")
+
+[node name="NearSoundZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NearSoundZone"]
+position = Vector2(2, 2)
+shape = SubResource("CircleShape2D_m1ayp")
+
+[node name="MonsterNearSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_lf86h")
+volume_db = -18.474

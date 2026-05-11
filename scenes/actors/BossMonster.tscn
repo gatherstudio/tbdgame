@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://7ypdsuk4t7w7"]
+
+[ext_resource type="Script" uid="uid://balnlx2tinwmh" path="res://scripts/actors/BattleMonster.gd" id="1_3xhqe"]
+[ext_resource type="Texture2D" uid="uid://b5ghaj0c4p386" path="res://assets/art/characters/boss.png" id="2_ch28w"]
+[ext_resource type="AudioStream" uid="uid://dr4qx7myolsxw" path="res://assets/audio/sfx/WastePaperMonster El (1).mp3" id="3_48tjt"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ctyhg"]
+radius = 43.0
+height = 86.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hvfba"]
+size = Vector2(104, 144)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m1ayp"]
+radius = 225.0
+
+[node name="BossMonster" type="CharacterBody2D"]
+script = ExtResource("1_3xhqe")
+monster_name = "Boss Trash Beast"
+monster_level = 4
+monster_max_health = 2000
+monster_damage = 15
+monster_crit_chance = 0.0
+drop_item = "portal_shard"
+drop_amount = 1
+return_scene_path = "res://scenes/world/WorldUndergroundBoss.tscn"
+is_boss = true
+move_distance = 70.0
+move_speed = 70.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ch28w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-19, -40)
+shape = SubResource("CapsuleShape2D_ctyhg")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(-13, -33)
+shape = SubResource("RectangleShape2D_hvfba")
+
+[node name="NearSoundZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NearSoundZone"]
+position = Vector2(-13, -38)
+shape = SubResource("CircleShape2D_m1ayp")
+
+[node name="MonsterNearSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_48tjt")
+volume_db = -18.474

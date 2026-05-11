@@ -1,14 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4vssg1bekl06"]
+[gd_scene load_steps=7 format=3 uid="uid://c4vssg1bekl06"]
 
 [ext_resource type="Texture2D" uid="uid://gy5uhedm10iy" path="res://assets/art/characters/EasyMonster.png" id="1_1u6vv"]
 [ext_resource type="Script" uid="uid://cjimoc5fs3yqf" path="res://scripts/actors/easy_monster.gd" id="1_ctyhg"]
+[ext_resource type="AudioStream" uid="uid://dr4qx7myolsxw" path="res://assets/audio/sfx/WastePaperMonster El (1).mp3" id="3_hvfba"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ctyhg"]
 radius = 21.0
 height = 44.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hvfba"]
-size = Vector2(91, 53)
+size = Vector2(62, 51)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m1ayp"]
+radius = 121.016525
 
 [node name="EasyMonster" type="CharacterBody2D"]
 script = ExtResource("1_ctyhg")
@@ -24,5 +28,15 @@ shape = SubResource("CapsuleShape2D_ctyhg")
 [node name="Hitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(-4.5, 1.5)
+position = Vector2(-5, 2.5)
 shape = SubResource("RectangleShape2D_hvfba")
+
+[node name="NearSoundZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NearSoundZone"]
+position = Vector2(-5, 4)
+shape = SubResource("CircleShape2D_m1ayp")
+
+[node name="MonsterNearSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_hvfba")
+volume_db = -18.474

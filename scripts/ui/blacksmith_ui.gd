@@ -97,7 +97,7 @@ func _update_blacksmith_ui() -> void:
 
 		3:
 			dialogue_label.text = "Blacksmith:\nThis next one could be some of my best work."
-			materials_label.text = "Final weapon cost is still being decided.\nCurrent idea: 20 Screws + 5 Cans + 3 Sea Glass"
+			materials_label.text = "Final weapon \nCurrent idea: 20 Screws + 5 Cans + 3 Sea Glass"
 			upgrade_button.text = "Final Upgrade"
 			upgrade_button.disabled = false
 
@@ -115,7 +115,7 @@ func _on_upgrade_pressed() -> void:
 	else:
 		dialogue_label.text = "Blacksmith:\nYou seriously think that's enough for me to work with?\nCome back when you actually have the materials."
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(5.0).timeout
 	_update_blacksmith_ui()
 
 func _on_leave_pressed() -> void:

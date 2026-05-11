@@ -199,6 +199,7 @@ offset_bottom = 8.0
 
 [node name="IntroMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_cwtqm")
+volume_db = -28.736
 
 [connection signal="text_submitted" from="DialogueLayer/DialogueBox/NameInput" to="." method="_on_name_input_text_submitted"]
 [connection signal="pressed" from="DialogueLayer/DialogueBox/ConfirmNameButton" to="." method="_on_confirm_name_button_pressed"]
