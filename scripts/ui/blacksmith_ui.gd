@@ -97,8 +97,8 @@ func _update_blacksmith_ui() -> void:
 
 		3:
 			dialogue_label.text = "Blacksmith:\nThis next one could be some of my best work."
-			materials_label.text = "Final weapon \nCurrent idea: 20 Screws + 5 Cans + 3 Sea Glass"
-			upgrade_button.text = "Final Upgrade"
+			materials_label.text = "Need: \n 20 Screws + 5 Cans + 3 Sea Glass"
+			upgrade_button.text = "Make Crusty Kettle"
 			upgrade_button.disabled = false
 
 		_:
@@ -111,7 +111,7 @@ func _on_upgrade_pressed() -> void:
 	var success := GameState.upgrade_weapon()
 
 	if success:
-		dialogue_label.text = "Blacksmith:\nI'll take those.\n\nCLANG CLANG CLANG!\n\nNow THAT'S a weapon."
+		dialogue_label.text = "Blacksmith:\nI'll take those.\nCLANG CLANG CLANG!\nNow THAT'S a weapon."
 	else:
 		dialogue_label.text = "Blacksmith:\nYou seriously think that's enough for me to work with?\nCome back when you actually have the materials."
 

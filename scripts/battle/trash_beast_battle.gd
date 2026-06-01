@@ -108,7 +108,7 @@ func _setup_monster_sprite() -> void:
 	if GameState.current_battle_is_boss:
 		$MonsterSprite.scale = Vector2(2, 2)
 	else:
-		$MonsterSprite.scale = Vector2(6, 6)
+		$MonsterSprite.scale = Vector2(5, 5)
 
 
 func _connect_buttons() -> void:
@@ -173,8 +173,8 @@ func _on_attack_pressed() -> void:
 			damage
 		]
 
-	if GameState.weapon_level == GameState.current_battle_monster_level:
-		$BattleText.text += "\n+1 Stealth Point"
+	#if GameState.weapon_level == GameState.current_battle_monster_level:
+		#$BattleText.text += "\n+1 Stealth Point"
 
 	_flash_monster()
 
@@ -234,7 +234,7 @@ func _monster_turn() -> void:
 	var monster_crit := false
 
 	if randf() < GameState.current_battle_monster_crit_chance:
-		damage *= 2
+		damage *= 1.2
 		monster_crit = true
 
 	GameState.take_damage(damage)
@@ -306,7 +306,17 @@ func _player_wins() -> void:
 		GameState.add_item("cans", 3)
 		reward_text += "\n+8 Mushrooms\n+3 Bananas\n+8 Screws\n+3 Cans"
 
-	GameState.save_game()
+	if GameState.current_battle_monster_level == 2 and not GameState.medium_level_shards_claimed:
+		GameState.add_item("portal_shard", 3)
+		GameState.medium_level_shards_claimed = true
+		GameState.save_game()
+		reward_text += "\n+3 Portal Shards!"
+
+	if GameState.current_battle_monster_level == 3 and not GameState.hard_level_shards_claimed:
+		GameState.add_item("portal_shard", 3)
+		GameState.hard_level_shards_claimed = true
+		GameState.save_game()
+		reward_text += "\n+3 Portal Shards!"
 
 	$BattleText.text = reward_text
 	_update_ui()
@@ -322,9 +332,10 @@ func _player_wins_boss() -> void:
 	_set_action_buttons_enabled(false)
 
 	GameState.add_item("portal_shard", 1)
+	GameState.final_portal_unlocked = true
 	GameState.save_game()
 
-	$BattleText.text = "You are basically dead...\nBoss: oopsie\nThe boss crumbles and leaves behind the final portal shard!"
+	$BattleText.text = "You are basically dead...\n...oopsie\nThe boss crumbles and leaves behind the final portal shard!"
 
 	_update_ui()
 
@@ -343,7 +354,7 @@ func _player_loses() -> void:
 
 	await get_tree().create_timer(1.0).timeout
 	GameState.respawn_player()
-	get_tree().change_scene_to_file(GameState.return_scene_path)
+	get_tree().change_scene_to_file("res://scenes/world/WorldSurface.tscn")
 
 
 func _flash_monster() -> void:

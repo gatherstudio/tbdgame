@@ -60,17 +60,17 @@ script = ExtResource("1_3uowe")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = -10.0
-offset_right = 1274.0
-offset_bottom = 710.0
+offset_left = -522.0
+offset_top = -312.0
+offset_right = 1834.0
+offset_bottom = 1104.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.9019608, 0.8117647, 0.6313726, 1)
 
 [node name="TitleAnimation" type="AnimatedSprite2D" parent="."]
 position = Vector2(630, 352)
-scale = Vector2(4, 4)
+scale = Vector2(6, 6)
 sprite_frames = SubResource("SpriteFrames_e1rb3")
 frame_progress = 0.78095144
 
@@ -87,3 +87,5 @@ offset_right = 8.0
 offset_bottom = 8.0
 
 [connection signal="timeout" from="HoldTimer" to="." method="_on_hold_timer_timeout"]
+[connection signal="pressed" from="NewGameButton" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_pressed"]

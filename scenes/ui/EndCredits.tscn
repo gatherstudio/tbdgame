@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwbst4g77r1le"]
+
+[ext_resource type="Script" uid="uid://3jfyjeu7085t" path="res://scripts/ui/end_credits.gd" id="1_3ig5b"]
+
+[node name="EndCredits" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_3ig5b")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = -890.0
+offset_top = -628.0
+offset_right = 3354.0
+offset_bottom = 1984.0
+
+[node name="CreditsLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

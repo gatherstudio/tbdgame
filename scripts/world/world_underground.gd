@@ -8,7 +8,7 @@ extends Node2D
 @export var level_id: String = "easy"
 @export var monster_scene: PackedScene = preload("res://scenes/actors/EasyMonster.tscn")
 @export var battle_monster_texture: Texture2D
-
+@export var final_portal_scene: PackedScene
 # Turn this ON only for the boss room.
 @export var is_boss_level: bool = false
 
@@ -19,7 +19,7 @@ extends Node2D
 # ============================================================
 
 @onready var player = $Player
-
+@onready var final_portal_spawn: Marker2D = $FinalPortalSpawn
 @onready var spawn_a = $MonsterSpawnA
 @onready var spawn_b = $MonsterSpawnB
 @onready var spawn_c = $MonsterSpawnC
@@ -34,6 +34,7 @@ func _ready() -> void:
 	_handle_return_from_battle()
 	_restore_player_position_if_needed()
 	_spawn_monsters()
+	_spawn_final_portal_if_needed()
 
 	if spawn_food:
 		_spawn_food()
@@ -142,6 +143,19 @@ func _spawn_food() -> void:
 
 		add_child(pickup)
 
+func _spawn_final_portal_if_needed() -> void:
+	if not is_boss_level:
+		return
+
+	if not GameState.final_portal_unlocked:
+		return
+
+	if final_portal_scene == null:
+		return
+
+	var portal = final_portal_scene.instantiate()
+	portal.global_position = final_portal_spawn.global_position
+	add_child(portal)
 
 func _setup_random_food_pickup(pickup) -> void:
 	if randi() % 100 < 80:

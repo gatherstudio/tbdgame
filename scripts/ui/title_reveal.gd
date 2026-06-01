@@ -50,12 +50,12 @@ func _position_buttons_under_title() -> void:
 
 	continue_button.global_position = Vector2(
 		title_center_x - button_width / 2,
-		title_bottom_y
+		title_bottom_y + 50
 	)
 
 	new_game_button.global_position = Vector2(
 		title_center_x - button_width / 2,
-		title_bottom_y + button_height + button_gap
+		title_bottom_y + button_height + button_gap + 40
 	)
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://bgxm333tqdxdy"]
+[gd_scene load_steps=75 format=4 uid="uid://bgxm333tqdxdy"]
 
 [ext_resource type="Script" uid="uid://cgwglja2p7agl" path="res://scripts/world/world_underground.gd" id="1_shul7"]
 [ext_resource type="PackedScene" uid="uid://c0y061s368gcg" path="res://scenes/actors/Player.tscn" id="2_bck86"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b5ghaj0c4p386" path="res://assets/art/characters/boss.png" id="3_33qgr"]
 [ext_resource type="Texture2D" uid="uid://d11fflipjn313" path="res://assets/art/tilesets/debug_grid_32.png" id="3_qomyd"]
 [ext_resource type="Texture2D" uid="uid://dro3vnh72crd2" path="res://assets/art/tilesets/Portal.png" id="4_33qgr"]
+[ext_resource type="PackedScene" uid="uid://dsf36vbtjyqjs" path="res://scenes/interactables/FinalPortal.tscn" id="4_om8dc"]
 [ext_resource type="Texture2D" uid="uid://fnmo0p5m4ndn" path="res://assets/art/tilesets/trash1.png" id="5_om8dc"]
 [ext_resource type="Texture2D" uid="uid://dvln8hva1ssgl" path="res://assets/art/tilesets/trash2.png" id="6_ae7lw"]
 [ext_resource type="Texture2D" uid="uid://dbimowbpgyuxi" path="res://assets/art/tilesets/trash3.png" id="7_tiq2i"]
@@ -20774,6 +20775,7 @@ script = ExtResource("1_shul7")
 level_id = "boss"
 monster_scene = ExtResource("2_qomyd")
 battle_monster_texture = ExtResource("3_33qgr")
+final_portal_scene = ExtResource("4_om8dc")
 is_boss_level = true
 
 [node name="Player" parent="." instance=ExtResource("2_bck86")]
@@ -21035,3 +21037,6 @@ shape = SubResource("RectangleShape2D_pyt13")
 
 [node name="CollectSoundPlayer" type="AudioStreamPlayer2D" parent="." groups=["collect_sound_player"]]
 stream = ExtResource("28_3whyp")
+
+[node name="FinalPortalSpawn" type="Marker2D" parent="."]
+position = Vector2(375, -123)

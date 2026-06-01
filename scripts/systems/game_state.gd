@@ -27,8 +27,15 @@ var armor_level: int = 0
 var critical_chance: float = 0.0
 var critical_multiplier: int = 2
 
+var stealth_points: int = 0
+
+# ==================================================
+# POSITION / RETURN STATE
+# ==================================================
+
 var return_player_position: Vector2 = Vector2.ZERO
 var should_restore_player_position: bool = false
+
 # ==================================================
 # CORE INVENTORY
 # ==================================================
@@ -52,15 +59,21 @@ var inventory: Dictionary = {
 var return_scene_path: String = ""
 var last_battle_result: String = ""
 var last_battle_monster_id: String = ""
+
 var current_battle_monster_texture: Texture2D = null
+
 var underground_easy_monster_defeated: bool = false
 var should_spawn_underground_easy_monster: bool = true
+
 var easy_level_shards_claimed: bool = false
+var medium_level_shards_claimed: bool = false
+var hard_level_shards_claimed: bool = false
+var boss_level_shards_claimed: bool = false
+
+var final_portal_unlocked: bool = false
 
 var underground_defeated_monsters_this_visit = []
 var underground_collected_food_this_visit = []
-
-var stealth_points: int = 0
 
 var current_battle_monster_name: String = "Trash Beast"
 var current_battle_monster_level: int = 1
@@ -91,6 +104,9 @@ func add_item(item_id: String, amount: int = 1) -> void:
 		inventory[item_id] = 0
 
 	inventory[item_id] += amount
+	save_game()
+	print("ADDING ITEM: ", item_id, " x", amount)
+	print("INVENTORY NOW: ", inventory)
 
 
 func remove_item(item_id: String, amount: int = 1) -> bool:
@@ -101,6 +117,7 @@ func remove_item(item_id: String, amount: int = 1) -> bool:
 		return false
 
 	inventory[item_id] -= amount
+	save_game()
 	return true
 
 
@@ -121,19 +138,31 @@ func has_item(item_id: String, amount: int = 1) -> bool:
 func save_game() -> void:
 	var save_data := {
 		"player_name": player_name,
+
 		"max_health": max_health,
 		"current_health": current_health,
+
 		"weapon_level": weapon_level,
 		"weapon_name": weapon_name,
 		"attack_power": attack_power,
 		"armor_level": armor_level,
 		"critical_chance": critical_chance,
 		"critical_multiplier": critical_multiplier,
+
+		"stealth_points": stealth_points,
+
 		"inventory": inventory,
+
 		"easy_level_shards_claimed": easy_level_shards_claimed,
+		"medium_level_shards_claimed": medium_level_shards_claimed,
+		"hard_level_shards_claimed": hard_level_shards_claimed,
+		"boss_level_shards_claimed": boss_level_shards_claimed,
+		"final_portal_unlocked": final_portal_unlocked,
+
 		"underground_defeated_monsters_this_visit": underground_defeated_monsters_this_visit,
 		"underground_collected_food_this_visit": underground_collected_food_this_visit
 	}
+	print("SAVE COMPLETE: ", inventory)
 
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file == null:
@@ -162,7 +191,7 @@ func load_game() -> void:
 		print("Load skipped: save file was not readable.")
 		return
 
-	player_name = str(save_data.get("player_name", "Player"))
+	player_name = str(save_data.get("player_name", player_name))
 
 	max_health = int(save_data.get("max_health", 15))
 	current_health = int(save_data.get("current_health", max_health))
@@ -174,6 +203,8 @@ func load_game() -> void:
 	critical_chance = float(save_data.get("critical_chance", 0.0))
 	critical_multiplier = int(save_data.get("critical_multiplier", 2))
 
+	stealth_points = int(save_data.get("stealth_points", 0))
+
 	inventory = save_data.get("inventory", {
 		"banana": 0,
 		"mushroom": 0,
@@ -183,8 +214,13 @@ func load_game() -> void:
 		"portal_shard": 0,
 		"brains": 0
 	})
+	print("LOAD COMPLETE INVENTORY: ", inventory)
 
 	easy_level_shards_claimed = bool(save_data.get("easy_level_shards_claimed", false))
+	medium_level_shards_claimed = bool(save_data.get("medium_level_shards_claimed", false))
+	hard_level_shards_claimed = bool(save_data.get("hard_level_shards_claimed", false))
+	boss_level_shards_claimed = bool(save_data.get("boss_level_shards_claimed", false))
+	final_portal_unlocked = bool(save_data.get("final_portal_unlocked", false))
 
 	underground_defeated_monsters_this_visit = save_data.get("underground_defeated_monsters_this_visit", [])
 	underground_collected_food_this_visit = save_data.get("underground_collected_food_this_visit", [])
@@ -209,8 +245,6 @@ func start_new_game() -> void:
 # ==================================================
 
 func reset_all() -> void:
-	player_name = "Player"
-
 	max_health = 15
 	current_health = 15
 
@@ -220,6 +254,8 @@ func reset_all() -> void:
 	armor_level = 0
 	critical_chance = 0.0
 	critical_multiplier = 2
+
+	stealth_points = 0
 
 	inventory = {
 		"banana": 0,
@@ -231,17 +267,43 @@ func reset_all() -> void:
 		"brains": 0
 	}
 
+	return_player_position = Vector2.ZERO
+	should_restore_player_position = false
+
 	return_scene_path = ""
 	last_battle_result = ""
 	last_battle_monster_id = ""
+	current_battle_monster_texture = null
 
 	underground_easy_monster_defeated = false
 	should_spawn_underground_easy_monster = true
-	easy_level_shards_claimed = false
 	should_spawn_underground_food = true
+
+	easy_level_shards_claimed = false
+	medium_level_shards_claimed = false
+	hard_level_shards_claimed = false
+	boss_level_shards_claimed = false
+	final_portal_unlocked = false
 
 	underground_defeated_monsters_this_visit.clear()
 	underground_collected_food_this_visit.clear()
+
+	current_battle_monster_name = "Trash Beast"
+	current_battle_monster_level = 1
+	current_battle_monster_max_health = 5
+	current_battle_monster_damage = 5
+	current_battle_monster_crit_chance = 0.0
+	current_battle_drop_item = "brains"
+	current_battle_drop_amount = 1
+	current_battle_player_goes_first = true
+	current_battle_is_boss = false
+	current_battle_boss_true_health = 100
+	current_battle_boss_fake_health = 2000
+
+	current_battle_bonus_mushroom_amount = 0
+	current_battle_bonus_banana_amount = 0
+	current_battle_bonus_screws_amount = 0
+	current_battle_bonus_cans_amount = 0
 
 # ==================================================
 # HEALTH FUNCTIONS

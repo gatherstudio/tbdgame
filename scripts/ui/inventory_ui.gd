@@ -13,7 +13,7 @@ var slots: Array = []
 const MAX_SLOTS := 12
 
 var item_icons := {
-	"banana": preload("res://assets/art/items/banana.png"),
+	"banana": preload("res://assets/art/items/bananas.png"),
 	"mushroom": preload("res://assets/art/items/mushroom.png"),
 	"portal_shard": preload("res://assets/art/items/shards.png"),
 	"brains": preload("res://assets/art/items/brains.png"),

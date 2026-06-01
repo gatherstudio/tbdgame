@@ -26,5 +26,6 @@ offset_bottom = 40.0
 
 [node name="EatSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_jywan")
+volume_db = -30.105
 
 [connection signal="pressed" from="BackpackButton" to="." method="_on_backpack_button_pressed"]

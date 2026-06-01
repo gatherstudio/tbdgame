@@ -176,20 +176,9 @@ func _on_banana_pressed() -> void:
 		_update_ui()
 		return
 
-	turn_in_progress = true
-	_set_action_buttons_enabled(false)
-
 	$BattleText.text = "You used a banana and healed to full HP!"
 	_update_ui()
 
-	await get_tree().create_timer(0.55).timeout
-
-	if monster_health > 0:
-		await _monster_turn()
-
-	if not battle_over:
-		turn_in_progress = false
-		_set_action_buttons_enabled(true)
 
 
 func _monster_turn() -> void:
@@ -252,7 +241,7 @@ func _player_loses() -> void:
 
 	await get_tree().create_timer(1.0).timeout
 	GameState.respawn_player()
-	get_tree().change_scene_to_file(GameState.return_scene_path)
+	get_tree().change_scene_to_file("res://scenes/world/WorldSurface.tscn")
 
 
 func _flash_monster() -> void:
